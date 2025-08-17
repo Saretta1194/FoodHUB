@@ -19,3 +19,6 @@ staticfiles/
 
 # VSCode
 .vscode/
+
+# Env
+.env
