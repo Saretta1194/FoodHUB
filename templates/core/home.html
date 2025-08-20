@@ -1,8 +1,15 @@
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>FoodHub — Home</title></head>
-<body>
-  <h1>FoodHub</h1>
-  <p>It works! 🎉</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Welcome to FoodHub</h1>
+  <p>🎉 Your homepage is working correctly!</p>
+
+  {% if user.is_authenticated %}
+    <p>Hello <strong>{{ user.username }}</strong>, you are logged in.</p>
+  {% else %}
+    <p>
+      <a href="{% url 'login' %}">Login</a> or 
+      <a href="{% url 'signup' %}">Sign up</a> to start ordering.
+    </p>
+  {% endif %}
+{% endblock %}
