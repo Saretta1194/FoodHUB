@@ -1,24 +1,10 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Virtual environments
-.venv/
-venv/
 bin/
 lib/
+include/
 pyvenv.cfg
-
-
-# Django
+*.pyc
+__pycache__/
 db.sqlite3
-/media/
+env.py
 staticfiles/
-
-# VSCode
-.vscode/
-
-# Env
-.env
+*.log
