@@ -3,6 +3,11 @@ import os
 from dotenv import load_dotenv
 import dj_database_url
 
+if os.path.exists(Path(__file__).resolve().parent.parent / "env.py"):
+    import sys
+    sys.path.append(str(Path(__file__).resolve().parent.parent))
+    import env
+
 # Load .env (for local dev)
 load_dotenv()
 
@@ -14,7 +19,9 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,.herokuapp.com").split(",")
 
 # CSRF trusted origins (important for Heroku)
-CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+CSRF_TRUSTED_ORIGINS = [
+    origin for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if origin
+]
 
 # Applications
 INSTALLED_APPS = [
@@ -99,6 +106,11 @@ USE_TZ = True
 # Static & Media files
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+# only add /static if directory exists to avoid warnings on Heroku
+STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
