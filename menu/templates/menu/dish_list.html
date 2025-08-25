@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Dishes for {{ restaurant.name }}</h1>
+<p><a href="{% url 'menu:dish_create' restaurant.id %}">Add new dish</a></p>
+<table>
+  <tr><th>Name</th><th>Price</th><th>Available</th><th>Actions</th></tr>
+  {% for dish in dishes %}
+  <tr>
+    <td>{{ dish.name }}</td>
+    <td>{{ dish.price }}</td>
+    <td>{{ dish.available|yesno:"✔,✘" }}</td>
+    <td>
+      <a href="{% url 'menu:dish_edit' dish.id %}">Edit</a> |
+      <a href="{% url 'menu:dish_delete' dish.id %}">Delete</a>
+    </td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="4">No dishes yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
