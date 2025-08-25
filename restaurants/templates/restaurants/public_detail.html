@@ -3,7 +3,6 @@
   <h1>{{ restaurant.name }}</h1>
   <p>{{ restaurant.address }}</p>
 
-  {# Raggruppa i piatti per categoria (usa il tag regroup) #}
   {% regroup dishes by category as dishes_by_cat %}
 
   {% if dishes_by_cat %}
@@ -11,11 +10,14 @@
       <h2>{{ group.grouper|default:"Uncategorized" }}</h2>
       <ul>
         {% for d in group.list %}
-          <li>
-            <strong>{{ d.name }}</strong>
-            — {{ d.price|floatformat:2 }}
-            {% if d.description %}<div>{{ d.description }}</div>{% endif %}
-          </li>
+        <li>
+          <strong>{{ d.name }}</strong> — {{ d.price|floatformat:2 }}
+          {% if d.description %}<div>{{ d.description }}</div>{% endif %}
+          <form method="post" action="{% url 'orders:cart_add' d.id %}" style="display:inline">
+            {% csrf_token %}
+            <button type="submit">Add to cart</button>
+          </form>
+        </li>
         {% endfor %}
       </ul>
     {% endfor %}
