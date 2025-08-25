@@ -24,6 +24,7 @@
       <span style="float:right">
         {% if user.is_authenticated %}
           Hello, {{ user.username }} —
+          <a href="{% url 'restaurants:owner_list' %}">My restaurants</a>
           <a href="{% url 'my_profile' %}">My profile</a>
           <a href="{% url 'logout' %}">Logout</a>
         {% else %}
