@@ -26,8 +26,9 @@ urlpatterns = [
     path("", home, name="home"),  # Home page
     path("restaurants/", include("restaurants.urls", namespace="restaurants")),
     path("menu/", include("menu.urls", namespace="menu")),
-    path("accounts/", include("users.urls")), #signup
-    path("accounts/", include("django.contrib.auth.urls")),  # login/logout/password reset
+    path("accounts/", include("users.urls")),  # signup
+    path("accounts/", include("django.contrib.auth.urls")),
+    # login/logout/password reset
     path("orders/", include("orders.urls", namespace="orders")),
 
     
@@ -36,4 +37,6 @@ urlpatterns = [
 
 # need only in dev mode (DEBUG=True)
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

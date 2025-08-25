@@ -95,6 +95,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Email backend (dev)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "no-reply@foodhub.local"
 
 # Auth redirects
 LOGIN_REDIRECT_URL = "/"
@@ -117,9 +118,6 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # only add /static if directory exists to avoid warnings on Heroku
 STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"

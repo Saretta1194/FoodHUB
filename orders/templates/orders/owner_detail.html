@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Order #{{ order.id }}</h1>
+<p><strong>Status:</strong> {{ order.status }}</p>
+<p><strong>Customer:</strong> {{ order.user.username }}</p>
+<p><strong>Total:</strong> {{ order.total_amount|floatformat:2 }}</p>
+
+<h2>Items</h2>
+<ul>
+  {% for item in order.items.all %}
+    <li>{{ item.dish_name }} — {{ item.quantity }} × {{ item.unit_price|floatformat:2 }}</li>
+  {% endfor %}
+</ul>
+
+{% if order.status in "CREATED,PAID" %}
+<form method="post" action="{% url 'orders:owner_prepare' order.pk %}">
+  {% csrf_token %}
+  <button type="submit">Set to PREPARING</button>
+</form>
+{% endif %}
+
+<p><a href="{% url 'orders:owner_orders' %}">&larr; Back to orders</a></p>
+{% endblock %}
