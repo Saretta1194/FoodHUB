@@ -27,6 +27,8 @@ urlpatterns = [
     path("restaurants/", include("restaurants.urls", namespace="restaurants")),
     path("accounts/", include("users.urls")), #signup
     path("accounts/", include("django.contrib.auth.urls")),  # login/logout/password reset
+    path("menu/", include("menu.urls", namespace="menu")),
+
 ]
 
 # need only in dev mode (DEBUG=True)
