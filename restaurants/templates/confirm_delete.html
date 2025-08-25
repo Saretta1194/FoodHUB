@@ -1,0 +1,11 @@
+{# templates/restaurants/confirm_delete.html #}
+{% extends "base.html" %}
+{% block content %}
+  <h1>Delete Restaurant</h1>
+  <p>Are you sure you want to delete <strong>{{ object.name }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirm</button>
+    <a href="{% url 'restaurants:owner_list' %}">Cancel</a>
+  </form>
+{% endblock %}

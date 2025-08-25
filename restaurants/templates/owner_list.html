@@ -1,0 +1,22 @@
+{# templates/restaurants/owner_list.html #}
+{% extends "base.html" %}
+{% block content %}
+  <h1>My Restaurants</h1>
+  <p><a href="{% url 'restaurants:create' %}">Create new restaurant</a></p>
+  {% if restaurants %}
+    <ul>
+      {% for r in restaurants %}
+        <li>
+          <strong>{{ r.name }}</strong> — {{ r.address }} — {{ r.opening_hours }}
+          {% if r.is_active %}<em>(active)</em>{% else %}<em>(inactive)</em>{% endif %}
+          <div>
+            <a href="{% url 'restaurants:edit' r.pk %}">Edit</a> |
+            <a href="{% url 'restaurants:delete' r.pk %}">Delete</a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No restaurants yet.</p>
+  {% endif %}
+{% endblock %}
