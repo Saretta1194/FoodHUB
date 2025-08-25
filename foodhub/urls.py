@@ -28,6 +28,8 @@ urlpatterns = [
     path("menu/", include("menu.urls", namespace="menu")),
     path("accounts/", include("users.urls")), #signup
     path("accounts/", include("django.contrib.auth.urls")),  # login/logout/password reset
+    path("orders/", include("orders.urls", namespace="orders")),
+
     
 
 ]

@@ -22,6 +22,7 @@
     <nav class="container">
       <strong>FoodHub</strong>
       <span style="float:right">
+        <a href="{% url 'orders:cart_detail' %}">Cart ({{ cart_item_count }})</a>
         <a href="{% url 'restaurants:public_list' %}">Restaurants</a>
         {% if user.is_authenticated %}
           Hello, {{ user.username }} —

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Checkout</h1>
+
+{% if items %}
+  <table>
+    <tr><th>Dish</th><th>Quantity</th><th>Line total</th></tr>
+    {% for it in items %}
+      <tr>
+        <td>{{ it.dish.name }}</td>
+        <td>{{ it.quantity }}</td>
+        <td>{{ it.line_total|floatformat:2 }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  <p><strong>Total:</strong> {{ total|floatformat:2 }}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Place order</button>
+    <a href="{% url 'orders:cart_detail' %}">Back to cart</a>
+  </form>
+{% else %}
+  <p>Your cart is empty.</p>
+{% endif %}
+{% endblock %}
