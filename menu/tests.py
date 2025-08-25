@@ -8,6 +8,7 @@ User = get_user_model()
 
 
 class DishTests(TestCase):
+
     def setUp(self):
         self.owner = User.objects.create_user(username="owner", password="pass123")
         self.other = User.objects.create_user(username="other", password="pass123")
@@ -42,3 +43,42 @@ class DishTests(TestCase):
         })
         self.assertEqual(resp.status_code, 404)  # not allowed
         self.assertFalse(Dish.objects.filter(name="Other Dish").exists())
+
+    def test_owner_can_delete_dish(self):
+        # Create a dish owned by self.owner
+        dish = Dish.objects.create(
+            restaurant=self.restaurant, name="ToDelete", price=5, available=True
+        )
+        # Login as owner and delete
+        self.client.login(username="owner", password="pass123")
+        url = reverse("menu:dish_delete", args=[dish.id])
+
+        # GET confirmation page
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 200)
+
+        # POST to confirm deletion
+        resp = self.client.post(url, follow=True)
+        self.assertRedirects(resp, reverse("menu:dish_list", args=[self.restaurant.id]))
+        self.assertFalse(Dish.objects.filter(id=dish.id).exists())
+
+    def test_non_owner_cannot_delete_dish(self):
+        # Create a dish owned by self.owner
+        dish = Dish.objects.create(
+            restaurant=self.restaurant, name="Protected", price=7, available=True
+        )
+        # Login as a different user
+        self.client.login(username="other", password="pass123")
+        url = reverse("menu:dish_delete", args=[dish.id])
+
+        # GET should already be blocked (object not in queryset) -> 404
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 404)
+
+        # POST should also be blocked -> 404 and object still exists
+        resp = self.client.post(url, follow=True)
+        self.assertEqual(resp.status_code, 404)
+        self.assertTrue(Dish.objects.filter(id=dish.id).exists())
+
+
+    

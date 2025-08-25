@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView,DetailView
 from django.shortcuts import get_object_or_404
 
 
 from .forms import RestaurantForm
 from .models import Restaurant
+from menu.models import Dish
+
 
 
 class OwnerMixin(LoginRequiredMixin, UserPassesTestMixin):
