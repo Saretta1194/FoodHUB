@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+  <h1>{{ restaurant.name }}</h1>
+  <p>{{ restaurant.address }}</p>
+
+  {# Raggruppa i piatti per categoria (usa il tag regroup) #}
+  {% regroup dishes by category as dishes_by_cat %}
+
+  {% if dishes_by_cat %}
+    {% for group in dishes_by_cat %}
+      <h2>{{ group.grouper|default:"Uncategorized" }}</h2>
+      <ul>
+        {% for d in group.list %}
+          <li>
+            <strong>{{ d.name }}</strong>
+            — {{ d.price|floatformat:2 }}
+            {% if d.description %}<div>{{ d.description }}</div>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  {% else %}
+    <p>No dishes available yet.</p>
+  {% endif %}
+
+  <p><a href="{% url 'restaurants:public_list' %}">&larr; Back to restaurants</a></p>
+{% endblock %}

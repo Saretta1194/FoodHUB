@@ -11,6 +11,7 @@ class Dish(models.Model):
     )
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
+    category = models.CharField(max_length=100, blank=True)
     price = models.DecimalField(
         max_digits=6, decimal_places=2,
         validators=[MinValueValidator(0.01)]

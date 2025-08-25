@@ -1,8 +1,9 @@
 from django.shortcuts import render
-# restaurants/views.py
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.shortcuts import get_object_or_404
+
 
 from .forms import RestaurantForm
 from .models import Restaurant
@@ -66,3 +67,30 @@ class RestaurantDeleteView(OwnerMixin, DeleteView):
     def get_queryset(self):
         return Restaurant.objects.filter(owner=self.request.user)
 
+class RestaurantListView(ListView):
+    model = Restaurant
+    template_name = "restaurants/public_list.html"
+    context_object_name = "restaurants"
+    paginate_by = 12
+
+    def get_queryset(self):
+        return Restaurant.objects.filter(is_active=True).order_by("name")
+
+
+class RestaurantDetailView(DetailView):
+    model = Restaurant
+    template_name = "restaurants/public_detail.html"
+    context_object_name = "restaurant"
+
+    def get_object(self, queryset=None):
+        # Only show active restaurants
+        return get_object_or_404(Restaurant, pk=self.kwargs["pk"], is_active=True)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # Only available dishes, sorted by category -> name
+        dishes = Dish.objects.filter(
+            restaurant=self.object, available=True
+        ).order_by("category", "name")
+        ctx["dishes"] = dishes
+        return ctx
