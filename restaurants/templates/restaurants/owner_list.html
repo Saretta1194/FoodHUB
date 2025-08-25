@@ -12,6 +12,7 @@
           <div>
             <a href="{% url 'restaurants:edit' r.pk %}">Edit</a> |
             <a href="{% url 'restaurants:delete' r.pk %}">Delete</a>
+            <a href="{% url 'menu:dish_list' r.id %}">Manage dishes</a>
           </div>
         </li>
       {% endfor %}

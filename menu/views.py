@@ -13,6 +13,39 @@ class OwnerDishMixin(LoginRequiredMixin):
     model = Dish
     form_class = DishForm
     template_name = "menu/dish_form.html"
+    success_url = reverse_lazy("restaurants:owner_list")
+
+    def get_queryset(self):
+        return Dish.objects.filter(restaurant__owner=self.request.user)
+
+    def get_restaurant(self):
+        # Recupera il ristorante: da URL (quando crei/listi) oppure dall'oggetto (quando editi/cancelli)
+        if hasattr(self, "object") and self.object is not None:
+            return self.object.restaurant
+        return get_object_or_404(
+            Restaurant,
+            pk=self.kwargs.get("restaurant_id"),
+            owner=self.request.user,
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["restaurant"] = self.get_restaurant()   # 🔹 Qui aggiungiamo sempre restaurant al context
+        return ctx
+
+    def form_valid(self, form):
+        if not getattr(form.instance, "restaurant_id", None):
+            form.instance.restaurant = self.get_restaurant()
+        messages.success(self.request, "Dish saved successfully!")
+        return super().form_valid(form)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Dish deleted successfully!")
+        return super().delete(request, *args, **kwargs)
+
+    model = Dish
+    form_class = DishForm
+    template_name = "menu/dish_form.html"
     success_url = reverse_lazy("restaurants:owner_list")  # redirect back to owner restaurants
 
     def get_queryset(self):

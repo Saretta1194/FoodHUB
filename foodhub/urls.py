@@ -25,9 +25,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home, name="home"),  # Home page
     path("restaurants/", include("restaurants.urls", namespace="restaurants")),
+    path("menu/", include("menu.urls", namespace="menu")),
     path("accounts/", include("users.urls")), #signup
     path("accounts/", include("django.contrib.auth.urls")),  # login/logout/password reset
-    path("menu/", include("menu.urls", namespace="menu")),
+    
 
 ]
 
