@@ -35,10 +35,10 @@ class CheckoutTests(TestCase):
 
         items = list(order.items.all())
         self.assertEqual(len(items), 2)
-        # snapshot di nome e prezzo
+        # snapshot of name and price
         self.assertEqual(items[0].dish_name in ["Pasta", "Tiramisu"], True)
         prices = {i.dish_name: i.unit_price for i in items}
         self.assertEqual(prices["Pasta"], Decimal("10.00"))
         self.assertEqual(prices["Tiramisu"], Decimal("6.00"))
-        # total calcolato
+        # total calcolate
         self.assertEqual(order.total_amount, Decimal("26.00"))
