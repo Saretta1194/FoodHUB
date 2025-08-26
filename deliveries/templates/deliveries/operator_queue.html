@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Operator Queue</h1>
+{% if orders %}
+  <ul>
+    {% for o in orders %}
+      <li>
+        Order #{{ o.id }} — {{ o.user.username }} — {{ o.restaurant.name }} — {{ o.status }}
+        <a href="{% url 'deliveries:assign_rider' o.id %}">Assign rider</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No orders pending assignment.</p>
+{% endif %}
+{% endblock %}

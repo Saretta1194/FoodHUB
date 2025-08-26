@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>My Deliveries</h1>
+{% if deliveries %}
+  <ul>
+    {% for d in deliveries %}
+      <li>
+        Order #{{ d.order.id }} — {{ d.order.restaurant.name }} — {{ d.status }}
+        <div>Assigned at: {{ d.assigned_at }}</div>
+        <ul>
+          {% for it in d.order.items.all %}
+            <li>{{ it.dish_name }} × {{ it.quantity }}</li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No deliveries assigned yet.</p>
+{% endif %}
+{% endblock %}
