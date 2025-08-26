@@ -144,10 +144,16 @@ STATICFILES_DIRS = (
 )
 
 if DEBUG:
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    STATICFILES_STORAGE = (
+        "django.contrib.staticfiles.storage."
+        "StaticFilesStorage"
+    )
 else:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-    
+    STATICFILES_STORAGE = (
+        "whitenoise.storage."
+        "CompressedManifestStaticFilesStorage"
+    )
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 

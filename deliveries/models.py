@@ -36,6 +36,30 @@ class Delivery(models.Model):
     def __str__(self):
         rid = f"rider={self.rider.username}" if self.rider else "rider=None"
         return f"Delivery(order={self.order_id}, {rid}, status={self.status})"
+    
+    STATUS_FLOW = [STATUS_ASSIGNED, STATUS_PICKED_UP, STATUS_DELIVERED]
+
+    def can_advance_to(self, next_status: str) -> bool:
+        """Allow only forward transitions along STATUS_FLOW."""
+        try:
+            cur = self.STATUS_FLOW.index(self.status)
+            nxt = self.STATUS_FLOW.index(next_status)
+        except ValueError:
+            return False
+        return nxt == cur + 1
+
+    def advance_to(self, next_status: str, actor=None) -> None:
+        """Advance status and log an event; raise ValueError if invalid."""
+        if not self.can_advance_to(next_status):
+            raise ValueError("Invalid status transition")
+        self.status = next_status
+        self.save(update_fields=["status", "updated_at"])
+        DeliveryEvent.objects.create(
+            delivery=self,
+            event_type=DeliveryEvent.EVENT_STATUS_CHANGE,
+            message=f"Status changed to {next_status}",
+            actor=actor,
+        )
 
 
 class DeliveryEvent(models.Model):

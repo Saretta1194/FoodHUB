@@ -84,23 +84,50 @@ class AssignmentTests(TestCase):
         resp = self.client.get(url)
         self.assertContains(resp, f"Order #{self.order.id}")
 
+
 class OperatorPermissionTests(TestCase):
     def setUp(self):
         # Users
-        self.staff = User.objects.create_user(username="operator", password="pass123", is_staff=True)
-        self.user = User.objects.create_user(username="user", password="pass123")
-        self.owner = User.objects.create_user(username="owner", password="pass123")
+        self.staff = User.objects.create_user(
+            username="operator", password="pass123", is_staff=True
+        )
+        self.user = User.objects.create_user(
+            username="user", password="pass123"
+        )
+        self.owner = User.objects.create_user(
+            username="owner", password="pass123"
+        )
 
         # Restaurant + Order with one item
         self.rest = Restaurant.objects.create(
-            owner=self.owner, name="R", address="A", opening_hours="09:00-18:00", is_active=True
+            owner=self.owner,
+            name="R",
+            address="A",
+            opening_hours="09:00-18:00",
+            is_active=True,
         )
-        self.dish = Dish.objects.create(restaurant=self.rest, name="Pasta", price=Decimal("12.00"), available=True)
-        self.order = Order.objects.create(user=self.user, restaurant=self.rest)  # status=CREATED by default
-        OrderItem.objects.create(order=self.order, dish=self.dish, dish_name="Pasta", unit_price=Decimal("12.00"), quantity=1)
+        self.dish = Dish.objects.create(
+            restaurant=self.rest,
+            name="Pasta",
+            price=Decimal("12.00"),
+            available=True,
+        )
+        self.order = Order.objects.create(
+            user=self.user, restaurant=self.rest
+        )  # status=CREATED by default
+        OrderItem.objects.create(
+            order=self.order,
+            dish=self.dish,
+            dish_name="Pasta",
+            unit_price=Decimal("12.00"),
+            quantity=1,
+        )
 
         self.queue_url = reverse("deliveries:operator_queue")
-        self.assign_url = reverse("deliveries:assign_rider", args=[self.order.id])
+        self.assign_url = reverse(
+            "deliveries:assign_rider",
+            args=[self.order.id],
+        )
 
     def test_non_staff_cannot_access_operator_queue(self):
         self.client.login(username="user", password="pass123")
@@ -115,9 +142,11 @@ class OperatorPermissionTests(TestCase):
         self.assertContains(resp, f"Order #{self.order.id}")
 
     def test_non_staff_cannot_assign_rider(self):
-        self.client.login(username="user", password="pass123")
-        resp = self.client.post(self.assign_url, data={"rider": self.user.id})
+        resp = self.client.post(
+            self.assign_url, data={"rider": self.user.id}
+        )
         # staff_member_required -> redirects to admin login (302) by default
+        self.assertEqual(resp.status_code, 302)
         self.assertEqual(resp.status_code, 302)
 
     def test_staff_can_open_assign_form(self):

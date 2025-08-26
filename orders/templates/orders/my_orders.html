@@ -6,8 +6,12 @@
     {% for o in orders %}
       <li>
         #{{ o.id }} — {{ o.restaurant.name }} — {{ o.status }} — {{ o.created_at }}
-        {% if o.delivery and o.delivery.rider %}
-          <div>Rider: {{ o.delivery.rider.username }}</div>
+        
+        {% if o.delivery %}
+          <div>Delivery status: {{ o.delivery.status }}</div>
+          {% if o.delivery.rider %}
+            <div>Rider: {{ o.delivery.rider.username }}</div>
+          {% endif %}
         {% endif %}
 
         <ul>

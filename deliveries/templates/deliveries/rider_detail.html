@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Delivery for Order #{{ delivery.order.id }}</h1>
+
+<p><strong>Status:</strong> {{ delivery.status }}</p>
+<p><strong>Restaurant:</strong> {{ delivery.order.restaurant.name }}</p>
+<p><strong>Customer:</strong> {{ delivery.order.user.username }}</p>
+
+<h2>Items</h2>
+<ul>
+  {% for it in delivery.order.items.all %}
+    <li>{{ it.dish_name }} × {{ it.quantity }} @ {{ it.unit_price|floatformat:2 }}</li>
+  {% endfor %}
+</ul>
+
+<h2>Actions</h2>
+{% if delivery.status == "ASSIGNED" %}
+  <form method="post" action="{% url 'deliveries:rider_mark_picked' delivery.pk %}">
+    {% csrf_token %}
+    <button type="submit">Mark as PICKED_UP</button>
+  </form>
+{% elif delivery.status == "PICKED_UP" %}
+  <form method="post" action="{% url 'deliveries:rider_mark_delivered' delivery.pk %}">
+    {% csrf_token %}
+    <button type="submit">Mark as DELIVERED</button>
+  </form>
+{% else %}
+  <p>No further actions available.</p>
+{% endif %}
+
+<h2>Timeline</h2>
+<ul>
+  {% for ev in delivery.events.all %}
+    <li>{{ ev.created_at }} — {{ ev.event_type }} — {{ ev.message }}</li>
+  {% empty %}
+    <li>No events yet.</li>
+  {% endfor %}
+</ul>
+
+<p><a href="{% url 'deliveries:rider_deliveries' %}">&larr; Back to my deliveries</a></p>
+{% endblock %}
