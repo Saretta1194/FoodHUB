@@ -1,5 +1,6 @@
 from .views import CART_SESSION_KEY
 
+
 def cart_item_count(request):
     """
     Returns the total number of items in the cart (sum of quantities).

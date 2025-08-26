@@ -5,16 +5,13 @@ from restaurants.models import Restaurant
 
 class Dish(models.Model):
     restaurant = models.ForeignKey(
-        Restaurant,
-        on_delete=models.CASCADE,
-        related_name="dishes"
+        Restaurant, on_delete=models.CASCADE, related_name="dishes"
     )
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     category = models.CharField(max_length=100, blank=True)
     price = models.DecimalField(
-        max_digits=6, decimal_places=2,
-        validators=[MinValueValidator(0.01)]
+        max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)]
     )
     available = models.BooleanField(default=True)
     photo = models.ImageField(upload_to="dishes/", blank=True, null=True)

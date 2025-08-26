@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 
+
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -16,13 +17,17 @@ class SignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
-    
+
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ("phone", "address")
         widgets = {
-            "phone": forms.TextInput(attrs={"placeholder": "e.g. +41 79 123 45 67"}),
-            "address": forms.TextInput(attrs={"placeholder": "Street, number, city"}),
+            "phone": forms.TextInput(
+                attrs={"placeholder": "e.g. +41 79 123 45 67"}
+            ),
+            "address": forms.TextInput(
+                attrs={"placeholder": "Street, number, city"}
+            ),
         }
-

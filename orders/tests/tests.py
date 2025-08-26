@@ -5,20 +5,36 @@ from decimal import Decimal
 
 from restaurants.models import Restaurant
 from menu.models import Dish
-from orders.models import Order, OrderItem
+from orders.models import Order
 
 User = get_user_model()
 
 
 class CheckoutTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="cust", password="pass123")
+        self.user = User.objects.create_user(
+            username="cust", password="pass123"
+        )
         owner = User.objects.create_user(username="owner", password="pass123")
         self.rest = Restaurant.objects.create(
-            owner=owner, name="R", address="A", opening_hours="09:00-18:00", is_active=True
+            owner=owner,
+            name="R",
+            address="A",
+            opening_hours="09:00-18:00",
+            is_active=True,
         )
-        self.d1 = Dish.objects.create(restaurant=self.rest, name="Pasta", price=Decimal("10.00"), available=True)
-        self.d2 = Dish.objects.create(restaurant=self.rest, name="Tiramisu", price=Decimal("6.00"), available=True)
+        self.d1 = Dish.objects.create(
+            restaurant=self.rest,
+            name="Pasta",
+            price=Decimal("10.00"),
+            available=True,
+        )
+        self.d2 = Dish.objects.create(
+            restaurant=self.rest,
+            name="Tiramisu",
+            price=Decimal("6.00"),
+            available=True,
+        )
 
     def test_checkout_creates_order_with_created_status_and_snapshots(self):
         session = self.client.session

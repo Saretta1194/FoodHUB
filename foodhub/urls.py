@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from core.views import home  
+from core.views import home
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -30,9 +30,6 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     # login/logout/password reset
     path("orders/", include("orders.urls", namespace="orders")),
-
-    
-
 ]
 
 # need only in dev mode (DEBUG=True)

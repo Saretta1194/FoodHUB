@@ -43,7 +43,10 @@ class Migration(migrations.Migration):
                         max_length=20,
                     ),
                 ),
-                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                (
+                    "created_at",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (
                     "user",
@@ -68,7 +71,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("dish_name", models.CharField(max_length=200)),
-                ("unit_price", models.DecimalField(decimal_places=2, max_digits=6)),
+                (
+                    "unit_price",
+                    models.DecimalField(decimal_places=2, max_digits=6),
+                ),
                 ("quantity", models.PositiveIntegerField(default=1)),
                 (
                     "dish",

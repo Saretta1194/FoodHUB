@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect 
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
@@ -14,12 +14,12 @@ class OwnerDishMixin(LoginRequiredMixin):
     model = Dish
     form_class = DishForm
     template_name = "menu/dish_form.html"
-    success_url = None  
+    success_url = None
 
     def get_queryset(self):
         return Dish.objects.filter(restaurant__owner=self.request.user)
 
-    def get_restaurant(self):   
+    def get_restaurant(self):
         if getattr(self, "object", None) is not None:
             return self.object.restaurant
         return get_object_or_404(
@@ -40,8 +40,10 @@ class OwnerDishMixin(LoginRequiredMixin):
         return super().form_valid(form)
 
     def get_success_url(self):
-       restaurant = self.get_restaurant()
-       return reverse("menu:dish_list", kwargs={"restaurant_id": restaurant.id})
+        restaurant = self.get_restaurant()
+        return reverse(
+            "menu:dish_list", kwargs={"restaurant_id": restaurant.id}
+        )
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Dish deleted successfully!")
@@ -74,7 +76,7 @@ class DishDeleteView(OwnerDishMixin, DeleteView):
         which can leave the page at 200. Here, we guarantee the redirect (302).
         """
         self.object = self.get_object()
-        restaurant = self.object.restaurant  
+        restaurant = self.object.restaurant
         self.object.delete()
         messages.success(self.request, "Dish deleted successfully!")
         return redirect("menu:dish_list", restaurant_id=restaurant.id)

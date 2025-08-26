@@ -5,8 +5,8 @@ import dj_database_url
 
 if os.path.exists(Path(__file__).resolve().parent.parent / "env.py"):
     import sys
+
     sys.path.append(str(Path(__file__).resolve().parent.parent))
-    import env
 
 # Load .env (for local dev)
 load_dotenv()
@@ -16,11 +16,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-insecure-key-change-me")
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,.herokuapp.com").split(",")
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS", "localhost,127.0.0.1,.herokuapp.com"
+).split(",")
 
 # CSRF trusted origins (important for Heroku)
 CSRF_TRUSTED_ORIGINS = [
-    origin for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if origin
+    origin
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin
 ]
 
 # Applications
@@ -67,7 +71,6 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "orders.context_processors.cart_item_count",
-
             ],
         },
     },
@@ -79,18 +82,35 @@ WSGI_APPLICATION = "foodhub.wsgi.application"
 DEFAULT_DB_URL = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
 DATABASES = {
     "default": dj_database_url.config(
-        default=DEFAULT_DB_URL,
-        conn_max_age=600,
-        ssl_require=True
+        default=DEFAULT_DB_URL, conn_max_age=600, ssl_require=True
     )
 }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator"
+        ),
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation." "MinimumLengthValidator"
+        ),
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "CommonPasswordValidator"
+        )
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "NumericPasswordValidator"
+        )
+    },
 ]
 
 # Email backend (dev)
@@ -114,9 +134,10 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Static & Media files
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
 # only add /static if directory exists to avoid warnings on Heroku
-STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
+STATICFILES_DIRS = (
+    [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
+)
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 

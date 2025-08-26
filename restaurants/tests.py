@@ -23,8 +23,12 @@ class RestaurantModelTests(TestCase):
 
 class OwnerOnlyViewsTests(TestCase):
     def setUp(self):
-        self.owner = User.objects.create_user(username="owner", password="pass1234")
-        self.other = User.objects.create_user(username="other", password="pass1234")
+        self.owner = User.objects.create_user(
+            username="owner", password="pass1234"
+        )
+        self.other = User.objects.create_user(
+            username="other", password="pass1234"
+        )
         self.r = Restaurant.objects.create(
             owner=self.owner,
             name="My Place",
@@ -64,7 +68,11 @@ class OwnerOnlyViewsTests(TestCase):
         }
         resp = self.client.post(url, payload, follow=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue(Restaurant.objects.filter(name="New Spot", owner=self.owner).exists())
+        self.assertTrue(
+            Restaurant.objects.filter(
+                name="New Spot", owner=self.owner
+            ).exists()
+        )
 
     def test_opening_hours_validation(self):
         self.client.login(username="owner", password="pass1234")
