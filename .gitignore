@@ -8,3 +8,4 @@ db.sqlite3
 env.py
 staticfiles/
 *.log
+.env

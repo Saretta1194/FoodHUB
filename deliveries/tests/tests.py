@@ -142,9 +142,7 @@ class OperatorPermissionTests(TestCase):
         self.assertContains(resp, f"Order #{self.order.id}")
 
     def test_non_staff_cannot_assign_rider(self):
-        resp = self.client.post(
-            self.assign_url, data={"rider": self.user.id}
-        )
+        resp = self.client.post(self.assign_url, data={"rider": self.user.id})
         # staff_member_required -> redirects to admin login (302) by default
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(resp.status_code, 302)

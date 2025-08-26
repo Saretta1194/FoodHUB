@@ -36,7 +36,7 @@ class Delivery(models.Model):
     def __str__(self):
         rid = f"rider={self.rider.username}" if self.rider else "rider=None"
         return f"Delivery(order={self.order_id}, {rid}, status={self.status})"
-    
+
     STATUS_FLOW = [STATUS_ASSIGNED, STATUS_PICKED_UP, STATUS_DELIVERED]
 
     def can_advance_to(self, next_status: str) -> bool:

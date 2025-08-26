@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -11,7 +11,6 @@ from .models import Delivery, DeliveryEvent
 from .forms import AssignRiderForm
 from django.views import View
 from django.conf import settings
-
 
 
 @staff_member_required
@@ -65,8 +64,10 @@ def rider_deliveries(request):
     qs = Delivery.objects.filter(rider=request.user).order_by("-assigned_at")
     return render(request, "deliveries/rider_list.html", {"deliveries": qs})
 
+
 class RiderDeliveryPermissionMixin(UserPassesTestMixin):
     """Allow only the assigned rider to access/modify the delivery."""
+
     raise_exception = True  # return 403 instead of redirect
 
     def get_object(self):
@@ -78,14 +79,19 @@ class RiderDeliveryPermissionMixin(UserPassesTestMixin):
         return delivery.rider_id == self.request.user.id
 
 
-class RiderDeliveryDetailView(LoginRequiredMixin, RiderDeliveryPermissionMixin, DetailView):
+class RiderDeliveryDetailView(
+    LoginRequiredMixin, RiderDeliveryPermissionMixin, DetailView
+):
     model = Delivery
     template_name = "deliveries/rider_detail.html"
     context_object_name = "delivery"
 
 
-class RiderMarkPickedUpView(LoginRequiredMixin, RiderDeliveryPermissionMixin, View):
+class RiderMarkPickedUpView(
+    LoginRequiredMixin, RiderDeliveryPermissionMixin, View
+):
     """Set delivery to PICKED_UP and notify customer."""
+
     def post(self, request, pk):
         delivery = self.get_object()
         try:
@@ -98,11 +104,23 @@ class RiderMarkPickedUpView(LoginRequiredMixin, RiderDeliveryPermissionMixin, Vi
         order = delivery.order
         subject = f"Your order #{order.id} has been picked up"
         message = "Your order is on its way to you."
-        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
-        recipient_list = [order.user.email] if order.user.email else []
+        from_email = getattr(
+            settings,
+            "DEFAULT_FROM_EMAIL",
+        recipient_list = (
+            [order.user.email] if order.user.email else []
+        )
         if recipient_list:
             try:
-                send_mail(subject, message, from_email, recipient_list, fail_silently=True)
+                send_mail(
+                    subject,
+                    message,
+                    from_email,
+                    recipient_list,
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
             except Exception:
                 pass
 
@@ -110,8 +128,11 @@ class RiderMarkPickedUpView(LoginRequiredMixin, RiderDeliveryPermissionMixin, Vi
         return redirect("deliveries:rider_detail", pk=delivery.pk)
 
 
-class RiderMarkDeliveredView(LoginRequiredMixin, RiderDeliveryPermissionMixin, View):
+class RiderMarkDeliveredView(
+    LoginRequiredMixin, RiderDeliveryPermissionMixin, View
+):
     """Set delivery to DELIVERED and notify customer."""
+
     def post(self, request, pk):
         delivery = self.get_object()
         try:
@@ -124,11 +145,19 @@ class RiderMarkDeliveredView(LoginRequiredMixin, RiderDeliveryPermissionMixin, V
         order = delivery.order
         subject = f"Your order #{order.id} has been delivered"
         message = "Enjoy your meal! Your order has been delivered."
-        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
+        from_email = getattr(
+            settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local"
+        )
         recipient_list = [order.user.email] if order.user.email else []
         if recipient_list:
             try:
-                send_mail(subject, message, from_email, recipient_list, fail_silently=True)
+                send_mail(
+                    subject,
+                    message,
+                    from_email,
+                    recipient_list,
+                    fail_silently=True,
+                )
             except Exception:
                 pass
 

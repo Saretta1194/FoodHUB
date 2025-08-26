@@ -16,7 +16,19 @@ urlpatterns = [
         name="assign_rider",
     ),
     path("rider/", views.rider_deliveries, name="rider_deliveries"),
-    path("rider/delivery/<int:pk>/", RiderDeliveryDetailView.as_view(), name="rider_detail"),
-    path("rider/delivery/<int:pk>/picked/", RiderMarkPickedUpView.as_view(), name="rider_mark_picked"),
-    path("rider/delivery/<int:pk>/delivered/", RiderMarkDeliveredView.as_view(), name="rider_mark_delivered"),
+    path(
+        "rider/delivery/<int:pk>/",
+        RiderDeliveryDetailView.as_view(),
+        name="rider_detail",
+    ),
+    path(
+        "rider/delivery/<int:pk>/picked/",
+        RiderMarkPickedUpView.as_view(),
+        name="rider_mark_picked",
+    ),
+    path(
+        "rider/delivery/<int:pk>/delivered/",
+        RiderMarkDeliveredView.as_view(),
+        name="rider_mark_delivered",
+    ),
 ]
