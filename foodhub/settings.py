@@ -79,10 +79,11 @@ TEMPLATES = [
 WSGI_APPLICATION = "foodhub.wsgi.application"
 
 # Database
+DATABASE_URL = os.environ.get("DATABASE_URL")
 DEFAULT_DB_URL = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
 DATABASES = {
-    "default": dj_database_url.config(
-        default=DEFAULT_DB_URL, conn_max_age=600, ssl_require=True
+    "default": dj_database_url.parse(
+        os.getenv("DATABASE_URL", DEFAULT_DB_URL), conn_max_age=600, ssl_require=not DEBUG
     )
 }
 
