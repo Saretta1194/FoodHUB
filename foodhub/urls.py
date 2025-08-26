@@ -31,7 +31,6 @@ urlpatterns = [
     # login/logout/password reset
     path("orders/", include("orders.urls", namespace="orders")),
     path("deliveries/", include("deliveries.urls", namespace="deliveries")),
-
 ]
 
 # need only in dev mode (DEBUG=True)

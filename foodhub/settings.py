@@ -83,7 +83,9 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 DEFAULT_DB_URL = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
 DATABASES = {
     "default": dj_database_url.parse(
-        os.getenv("DATABASE_URL", DEFAULT_DB_URL), conn_max_age=600, ssl_require=not DEBUG
+        os.getenv("DATABASE_URL", DEFAULT_DB_URL),
+        conn_max_age=600,
+        ssl_require=not DEBUG,
     )
 }
 
@@ -135,13 +137,17 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Static & Media files
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # only add /static if directory exists to avoid warnings on Heroku
 STATICFILES_DIRS = (
     [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
 )
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
+if DEBUG:
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+else:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 

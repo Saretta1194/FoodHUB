@@ -7,13 +7,19 @@ from orders.models import Order
 from .models import Delivery, DeliveryEvent
 from .forms import AssignRiderForm
 
+
 @staff_member_required
 def operator_queue(request):
     """List orders without a delivery yet (CREATED/PREPARING)."""
-    qs = Order.objects.filter(
-        status__in=[Order.STATUS_CREATED, Order.STATUS_PREPARING],
-    ).exclude(delivery__isnull=False).order_by("-created_at")
+    qs = (
+        Order.objects.filter(
+            status__in=[Order.STATUS_CREATED, Order.STATUS_PREPARING],
+        )
+        .exclude(delivery__isnull=False)
+        .order_by("-created_at")
+    )
     return render(request, "deliveries/operator_queue.html", {"orders": qs})
+
 
 @staff_member_required
 def assign_rider(request, order_id):
@@ -42,7 +48,11 @@ def assign_rider(request, order_id):
     else:
         form = AssignRiderForm()
 
-    return render(request, "deliveries/assign.html", {"order": order, "form": form})
+    return render(
+        request, "deliveries/assign.html", {"order": order, "form": form}
+    )
+
+
 @login_required
 def rider_deliveries(request):
     """List deliveries assigned to the current rider."""

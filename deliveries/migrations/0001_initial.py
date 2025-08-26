@@ -80,7 +80,10 @@ class Migration(migrations.Migration):
                 ),
                 ("event_type", models.CharField(max_length=50)),
                 ("message", models.TextField(blank=True)),
-                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                (
+                    "created_at",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
                 (
                     "actor",
                     models.ForeignKey(
