@@ -8,6 +8,8 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, View
+from django.http import JsonResponse, Http404
+
 
 from menu.models import Dish
 from .models import Order, OrderItem
@@ -265,3 +267,37 @@ def my_orders(request):
     """List orders of the current customer."""
     orders = Order.objects.filter(user=request.user).order_by("-created_at")
     return render(request, "orders/my_orders.html", {"orders": orders})
+
+
+def _ensure_order_owner(request, order):
+    if order.user_id != request.user.id:
+        raise Http404()
+
+@login_required
+def customer_order_detail(request, pk):
+    order = get_object_or_404(Order.objects.select_related("restaurant").prefetch_related("items"), pk=pk)
+    _ensure_order_owner(request, order)
+    delivery = getattr(order, "delivery", None)
+    events = delivery.events.all() if delivery else []
+    return render(request, "orders/customer_order_detail.html", {
+        "order": order,
+        "delivery": delivery,
+        "events": events,
+    })
+
+@login_required
+def customer_order_status_json(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    _ensure_order_owner(request, order)
+    delivery = getattr(order, "delivery", None)
+    data = {
+        "order_id": order.id,
+        "order_status": order.status,
+        "delivery_status": getattr(delivery, "status", None),
+        "rider": getattr(getattr(delivery, "rider", None), "username", None),
+        "events": [
+            {"at": ev.created_at.isoformat(), "type": ev.event_type, "message": ev.message}
+            for ev in (delivery.events.all() if delivery else [])
+        ],
+    }
+    return JsonResponse(data)

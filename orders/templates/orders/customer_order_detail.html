@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Order #{{ order.id }}</h1>
+<p><strong>Restaurant:</strong> {{ order.restaurant.name }}</p>
+<p><strong>Order status:</strong> <span id="order-status">{{ order.status }}</span></p>
+
+{% if delivery %}
+  <p><strong>Delivery status:</strong> <span id="delivery-status">{{ delivery.status }}</span></p>
+  {% if delivery.rider %}
+    <p><strong>Rider:</strong> <span id="rider-name">{{ delivery.rider.username }}</span></p>
+  {% endif %}
+
+  <h2>Timeline</h2>
+  <ul id="timeline">
+    {% for ev in events %}
+      <li data-at="{{ ev.created_at|date:'c' }}">{{ ev.created_at }} — {{ ev.event_type }} — {{ ev.message }}</li>
+    {% empty %}
+      <li>No events yet.</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No delivery created yet.</p>
+{% endif %}
+
+<h2>Items</h2>
+<ul>
+  {% for it in order.items.all %}
+    <li>{{ it.dish_name }} × {{ it.quantity }} @ {{ it.unit_price|floatformat:2 }}</li>
+  {% endfor %}
+</ul>
+
+<script>
+  (function(){
+    const url = "{% url 'orders:customer_order_status_json' order.id %}";
+    function poll(){
+      fetch(url, {headers: {'X-Requested-With': 'XMLHttpRequest'}})
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('order-status').textContent = data.order_status || '';
+          if (document.getElementById('delivery-status')) {
+            document.getElementById('delivery-status').textContent = data.delivery_status || '';
+          }
+          if (document.getElementById('rider-name') && data.rider) {
+            document.getElementById('rider-name').textContent = data.rider;
+          }
+          const tl = document.getElementById('timeline');
+          if (tl) {
+            tl.innerHTML = '';
+            if (data.events.length === 0) {
+              tl.innerHTML = '<li>No events yet.</li>';
+            } else {
+              data.events.forEach(ev => {
+                const li = document.createElement('li');
+                const when = new Date(ev.at);
+                li.textContent = when.toLocaleString() + " — " + ev.type + " — " + ev.message;
+                tl.appendChild(li);
+              });
+            }
+          }
+        })
+        .catch(() => {});
+    }
+    setInterval(poll, 10000); // 10s
+  })();
+</script>
+{% endblock %}

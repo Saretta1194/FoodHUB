@@ -14,6 +14,8 @@
           {% endif %}
         {% endif %}
 
+        <a href="{% url 'customer_order_detail' o.id %}">Track order</a>
+
         <ul>
           {% for it in o.items.all %}
             <li>{{ it.dish_name }} × {{ it.quantity }} @ {{ it.unit_price|floatformat:2 }}</li>

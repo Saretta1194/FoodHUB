@@ -32,4 +32,6 @@ urlpatterns = [
     ),
     # Client
     path("my/", views.my_orders, name="my_orders"),
+    path("my/<int:pk>/", views.customer_order_detail, name="customer_order_detail"),
+    path("my/<int:pk>/status.json", views.customer_order_status_json, name="customer_order_status_json"),
 ]

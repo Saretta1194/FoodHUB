@@ -107,6 +107,8 @@ class RiderMarkPickedUpView(
         from_email = getattr(
             settings,
             "DEFAULT_FROM_EMAIL",
+            "no-reply@foodhub.local"
+        )
         recipient_list = (
             [order.user.email] if order.user.email else []
         )
@@ -119,8 +121,6 @@ class RiderMarkPickedUpView(
                     recipient_list,
                     fail_silently=True,
                 )
-            except Exception:
-                pass
             except Exception:
                 pass
 
