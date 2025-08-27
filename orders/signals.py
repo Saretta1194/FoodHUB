@@ -28,6 +28,12 @@ def _notify_order_status_change(sender, instance: Order, created, **kwargs):
     to = [instance.user.email] if instance.user and instance.user.email else []
     if to:
         try:
-            send_mail(subj, msg, getattr(settings, "DEFAULT_FROM_EMAIL", None), to, fail_silently=True)
+            send_mail(
+                subj,
+                msg,
+                getattr(settings, "DEFAULT_FROM_EMAIL", None),
+                to, 
+                fail_silently=True
+            )
         except Exception:
             pass

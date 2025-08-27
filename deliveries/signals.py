@@ -24,14 +24,14 @@ def _notify_delivery_status_change(sender, instance: Delivery, created, **kwargs
         return
 
     order = instance.order
-    to = [order.user.email] if order and order.user and order.user.email else []
-    if not to:
+    recipient_list = [order.user.email] if order and order.user and order.user.email else []
+    if not recipient_list:
         return
 
     status_lower = instance.status.replace("_", " ").lower()
-    subj = f"Your order #{order.id} has been {status_lower}"
-    msg = f"Order #{order.id} status changed to {instance.status}."
+    subject = f"Your order #{order.id} has been {status_lower}"
+    message = f"Order #{order.id} status changed to {instance.status}."
     try:
-        send_mail(subj, msg, getattr(settings, "DEFAULT_FROM_EMAIL", None), to, fail_silently=True)
+        send_mail(subject, message, getattr(settings, "DEFAULT_FROM_EMAIL", None), recipient_list, fail_silently=True)
     except Exception:
         pass
