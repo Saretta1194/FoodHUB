@@ -17,6 +17,8 @@ class Restaurant(models.Model):
     )
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=255)
+    description = models.TextField(blank=True)  # short description
+    cover_image = models.ImageField(upload_to="restaurants/", blank=True, null=True)
     opening_hours = models.CharField(
         max_length=20,
         validators=[opening_hours_validator],
