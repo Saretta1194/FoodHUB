@@ -1,29 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>{{ restaurant.name }}</h1>
-  <p>{{ restaurant.address }}</p>
-
-  {% regroup dishes by category as dishes_by_cat %}
-
-  {% if dishes_by_cat %}
-    {% for group in dishes_by_cat %}
-      <h2>{{ group.grouper|default:"Uncategorized" }}</h2>
-      <ul>
-        {% for d in group.list %}
-        <li>
-          <strong>{{ d.name }}</strong> — {{ d.price|floatformat:2 }}
-          {% if d.description %}<div>{{ d.description }}</div>{% endif %}
-          <form method="post" action="{% url 'orders:cart_add' d.id %}" style="display:inline">
-            {% csrf_token %}
-            <button type="submit">Add to cart</button>
-          </form>
-        </li>
-        {% endfor %}
-      </ul>
-    {% endfor %}
-  {% else %}
-    <p>No dishes available yet.</p>
+<div class="mb-4">
+  <h1 class="mb-1">{{ restaurant.name }}</h1>
+  <div class="text-muted">{{ restaurant.address }} — {{ restaurant.opening_hours }}</div>
+  {% if restaurant.cover_image %}
+    <img src="{{ restaurant.cover_image.url }}" class="img-fluid my-3 rounded" alt="{{ restaurant.name }}">
   {% endif %}
+  {% if restaurant.description %}
+    <p>{{ restaurant.description }}</p>
+  {% endif %}
+</div>
 
-  <p><a href="{% url 'restaurants:public_list' %}">&larr; Back to restaurants</a></p>
+<h2 class="h4">Menu</h2>
+{% if dishes %}
+  <div class="row g-3">
+    {% for d in dishes %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+          {% if d.photo %}
+            <img src="{{ d.photo.url }}" class="card-img-top" alt="{{ d.name }}">
+          {% endif %}
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ d.name }}</h5>
+            {% if d.description %}
+              <p class="card-text">{{ d.description|truncatechars:140 }}</p>
+            {% endif %}
+            <p class="mt-auto fw-bold">€ {{ d.price|floatformat:2 }}</p>
+
+            {% if d.available %}
+              <form method="post" action="{% url 'orders:cart_add' d.id %}">
+                {% csrf_token %}
+                <div class="input-group">
+                  <input type="number" name="qty" class="form-control" value="1" min="1">
+                  <button type="submit" class="btn btn-success">Add to cart</button>
+                </div>
+              </form>
+            {% else %}
+              <span class="badge bg-secondary">Not available</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">No dishes yet.</div>
+{% endif %}
 {% endblock %}
