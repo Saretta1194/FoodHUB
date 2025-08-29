@@ -30,6 +30,8 @@ urlpatterns = [
         OwnerOrderPrepareView.as_view(),
         name="owner_prepare",
     ),
+    path("export/csv/", views.export_orders_csv, name="export_orders_csv"),
+    
     # Client
     path("my/", views.my_orders, name="my_orders"),
     path("my/<int:pk>/", views.customer_order_detail, name="customer_order_detail"),

@@ -1,14 +1,19 @@
 from decimal import Decimal
-
+import csv
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, View
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse, Http404, HttpResponse
+from django.utils.dateparse import parse_date
+from django.utils import timezone
+
+
 
 
 from menu.models import Dish
@@ -301,3 +306,42 @@ def customer_order_status_json(request, pk):
         ],
     }
     return JsonResponse(data)
+
+@staff_member_required
+def export_orders_csv(request):
+    start = request.GET.get("start")
+    end = request.GET.get("end")
+    try:
+        start_date = parse_date(start) if start else None
+        end_date = parse_date(end) if end else None
+    except ValueError:
+        start_date = end_date = None
+
+    qs = Order.objects.select_related("restaurant", "user").order_by("created_at")
+    if start_date:
+        qs = qs.filter(created_at__date__gte=start_date)
+    if end_date:
+        qs = qs.filter(created_at__date__lte=end_date)
+
+    # CSV response
+    filename = "orders_export.csv"
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response)
+    writer.writerow(["id","created_at","user","restaurant","status","total_items","total_amount"])
+
+    for o in qs:
+        total_items = sum(i.quantity for i in o.items.all())
+        total_amount = sum(i.unit_price * i.quantity for i in o.items.all())
+        writer.writerow([
+            o.id,
+            timezone.localtime(o.created_at).isoformat(),
+            getattr(o.user, "username", ""),
+            getattr(o.restaurant, "name", ""),
+            o.status,
+            total_items,
+            f"{total_amount:.2f}",
+        ])
+
+    return response

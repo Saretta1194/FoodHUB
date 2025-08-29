@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Operator Queue</h1>
+<form method="get" action="{% url 'orders:export_orders_csv' %}" style="margin:12px 0;">
+  <label>From <input type="date" name="start"></label>
+  <label>To <input type="date" name="end"></label>
+  <button type="submit">Export CSV</button>
+</form>
 {% if orders %}
   <ul>
     {% for o in orders %}
