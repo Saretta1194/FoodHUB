@@ -1,28 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Restaurants</h1>
-  {% if restaurants %}
-    <ul>
-      {% for r in restaurants %}
-        <li>
-          <a href="{% url 'restaurants:public_detail' r.pk %}"><strong>{{ r.name }}</strong></a>
-          <div>{{ r.address }}</div>
-        </li>
-      {% endfor %}
-    </ul>
+<h1>Restaurants</h1>
 
-    {% if is_paginated %}
-      <div>
-        {% if page_obj.has_previous %}
-          <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
-        <span>Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
-        {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}">Next</a>
-        {% endif %}
+{% if restaurants %}
+  <div class="row g-3">
+    {% for r in restaurants %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+          {% if r.cover_image %}
+            <img src="{{ r.cover_image.url }}" class="card-img-top" alt="{{ r.name }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ r.name }}</h5>
+            {% if r.description %}
+              <p class="card-text">{{ r.description|truncatechars:120 }}</p>
+            {% endif %}
+            <p class="card-text"><small class="text-muted">{{ r.address }}</small></p>
+            <a href="{% url 'restaurants:public_detail' r.id %}" class="btn btn-primary">View menu</a>
+          </div>
+        </div>
       </div>
-    {% endif %}
-  {% else %}
-    <p>No active restaurants right now.</p>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-secondary">Previous</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-secondary">Next</a>
+      {% endif %}
+    </div>
   {% endif %}
+{% else %}
+  <div class="alert alert-info">No restaurants available.</div>
+{% endif %}
 {% endblock %}
