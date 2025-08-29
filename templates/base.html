@@ -19,41 +19,57 @@
 </head>
 <body>
   <header>
-    <nav class="container">
+    <nav class="container d-flex justify-content-between align-items-center">
       <strong>FoodHub</strong>
-      <span style="float:right">
-        <a href="{% url 'orders:cart_detail' %}">Cart ({{ cart_item_count }})</a>
-        <a href="{% url 'restaurants:public_list' %}">Restaurants</a>
+      <div>
+        <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'restaurants' %}fw-bold text-decoration-underline{% endif %}"
+           href="{% url 'restaurants:public_list' %}">Restaurants</a>
+  
+        <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'orders' and request.resolver_match.url_name == 'cart_detail' %}fw-bold text-decoration-underline{% endif %}"
+           href="{% url 'orders:cart_detail' %}">Cart ({{ cart_item_count }})</a>
+  
         {% if user.is_authenticated %}
-          Hello, {{ user.username }} —
-          <a href="{% url 'restaurants:owner_list' %}">My restaurants</a>
-          <a href="{% url 'orders:owner_orders' %}">Orders</a>
-          <a href="{% url 'orders:my_orders' %}">My orders</a>
-          <a href="{% url 'my_profile' %}">My profile</a>
-      
+          <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'restaurants' and request.resolver_match.url_name|default:'' in:'owner_list,owner_create,owner_update' %}fw-bold text-decoration-underline{% endif %}"
+             href="{% url 'restaurants:owner_list' %}">My restaurants</a>
+  
+          <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'orders' and request.resolver_match.url_name == 'owner_orders' %}fw-bold text-decoration-underline{% endif %}"
+             href="{% url 'orders:owner_orders' %}">Orders</a>
+  
+          <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'orders' and request.resolver_match.url_name == 'my_orders' %}fw-bold text-decoration-underline{% endif %}"
+             href="{% url 'orders:my_orders' %}">My orders</a>
+  
           {% if user.is_staff %}
-            <a href="{% url 'deliveries:operator_queue' %}">Operator</a>
+            <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'deliveries' and request.resolver_match.url_name == 'operator_queue' %}fw-bold text-decoration-underline{% endif %}"
+               href="{% url 'deliveries:operator_queue' %}">Operator</a>
           {% endif %}
-          <a href="{% url 'deliveries:rider_deliveries' %}">My deliveries</a>
-      
-          <a href="{% url 'logout' %}">Logout</a>
+          <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'deliveries' and request.resolver_match.url_name == 'rider_deliveries' %}fw-bold text-decoration-underline{% endif %}"
+             href="{% url 'deliveries:rider_deliveries' %}">My deliveries</a>
+  
+          <span class="me-2">Hello, {{ user.username }}</span>
+          <a class="me-2" href="{% url 'my_profile' %}">My profile</a>
+          <a class="me-2" href="{% url 'logout' %}">Logout</a>
         {% else %}
-          <a href="{% url 'login' %}">Login</a>
-          <a href="{% url 'signup' %}">Sign up</a>
+          <a class="me-2 {% if request.resolver_match and request.resolver_match.url_name == 'login' %}fw-bold text-decoration-underline{% endif %}"
+             href="{% url 'login' %}">Login</a>
+          <a class="me-2 {% if request.resolver_match and request.resolver_match.url_name == 'signup' %}fw-bold text-decoration-underline{% endif %}"
+             href="{% url 'signup' %}">Sign up</a>
         {% endif %}
-      </span>
-      
+      </div>
     </nav>
   </header>
+  
 
   <main class="container">
     {% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-          <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
+    <div class="mt-3">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} mb-2" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  
     {% block content %}{% endblock %}
   </main>
 
