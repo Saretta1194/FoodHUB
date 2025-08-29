@@ -12,6 +12,7 @@
             <li>{{ it.dish_name }} × {{ it.quantity }}</li>
           {% endfor %}
         </ul>
+        <a href="{% url 'deliveries:rider_detail' d.pk %}">Details</a>
       </li>
     {% endfor %}
   </ul>
