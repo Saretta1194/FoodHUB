@@ -31,22 +31,30 @@
            href="{% url 'orders:cart_detail' %}">Cart ({{ cart_item_count }})</a>
       
         {% if user.is_authenticated %}
-          <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'restaurants' and request.resolver_match.url_name in 'owner_list owner_create owner_update' %}fw-bold text-decoration-underline{% endif %}"
-             href="{% url 'restaurants:owner_list' %}">My restaurants</a>
-      
-          <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'orders' and request.resolver_match.url_name == 'owner_orders' %}fw-bold text-decoration-underline{% endif %}"
-             href="{% url 'orders:owner_orders' %}">Orders</a>
-      
+          {# only costumer (everyone) #}
           <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'orders' and request.resolver_match.url_name == 'my_orders' %}fw-bold text-decoration-underline{% endif %}"
              href="{% url 'orders:my_orders' %}">My orders</a>
       
+          {# only owner (if you have one restaurant) #}
+          {% if is_owner %}
+            <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'restaurants' and request.resolver_match.url_name in 'owner_list owner_create owner_update' %}fw-bold text-decoration-underline{% endif %}"
+               href="{% url 'restaurants:owner_list' %}">My restaurants</a>
+      
+            <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'orders' and request.resolver_match.url_name == 'owner_orders' %}fw-bold text-decoration-underline{% endif %}"
+               href="{% url 'orders:owner_orders' %}">Orders</a>
+          {% endif %}
+      
+          {# only rider (if you have one delivery) #}
+          {% if is_rider %}
+            <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'deliveries' and request.resolver_match.url_name == 'rider_deliveries' %}fw-bold text-decoration-underline{% endif %}"
+               href="{% url 'deliveries:rider_deliveries' %}">My deliveries</a>
+          {% endif %}
+      
+          {# only operator (staff) #}
           {% if user.is_staff %}
             <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'deliveries' and request.resolver_match.url_name == 'operator_queue' %}fw-bold text-decoration-underline{% endif %}"
                href="{% url 'deliveries:operator_queue' %}">Operator</a>
           {% endif %}
-      
-          <a class="me-2 {% if request.resolver_match and request.resolver_match.namespace == 'deliveries' and request.resolver_match.url_name == 'rider_deliveries' %}fw-bold text-decoration-underline{% endif %}"
-             href="{% url 'deliveries:rider_deliveries' %}">My deliveries</a>
       
           <span class="me-2">Hello, {{ user.username }}</span>
           <a class="me-2" href="{% url 'my_profile' %}">My profile</a>
