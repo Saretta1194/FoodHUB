@@ -35,11 +35,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "cloudinary_storage",
     "crispy_forms",
     "crispy_bootstrap5",
-    "cloudinary",
-    
+        
     # Project apps
     "core",
     "users",
@@ -143,10 +141,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Static & Media files
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-# only add /static if directory exists to avoid warnings on Heroku
-STATICFILES_DIRS = (
-    [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
-)
+STATICFILES_DIRS = [BASE_DIR / "core" / "static"] 
 
 if DEBUG:
     STATICFILES_STORAGE = (

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login
-
+from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, UserProfileForm
 
 
@@ -17,8 +17,8 @@ def signup(request):
             )
             return redirect("home")
     else:
-        form = SignUpForm()
-    return render(request, "registration/signup.html", {"form": form})
+        form = UserCreationForm()
+    return render(request, "users/signup.html", {"form": form})
 
 
 @login_required
