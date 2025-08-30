@@ -35,8 +35,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary_storage",
     "crispy_forms",
     "crispy_bootstrap5",
+    "cloudinary",
+    
     # Project apps
     "core",
     "users",
@@ -158,3 +161,24 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Use Cloudinary in production when CLOUDINARY_URL is defined
+CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")
+
+if CLOUDINARY_URL:
+    INSTALLED_APPS += ["cloudinary", "cloudinary_storage"]
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+    # Optional: customize Cloudinary folder and caching
+    CLOUDINARY_STORAGE = {
+        "CLOUDINARY_URL": CLOUDINARY_URL,
+        "STATIC_IMAGES_EXTENSIONS": ["jpg", "png", "gif", "webp"],
+        "RAW_EXTENSIONS": ["pdf"],
+        "PREFIX": "foodhub",  # folder prefix in Cloudinary
+    }
+else:
+    # Local dev uses filesystem media
+    # DEFAULT_FILE_STORAGE remains default filesystem storage
+    pass
+
+# Static files: keep WhiteNoise for static files in prod
