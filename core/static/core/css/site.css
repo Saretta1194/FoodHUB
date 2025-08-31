@@ -113,7 +113,7 @@
     max-width: 58ch;
     margin-bottom: 1rem;
   }
-  .hero-cta .btn{ margin-right: .5rem; }
+  .hero-cta .btn{ margin-right: .5rem; margin-bottom: 10px; }
   .hero-illustration{ text-align: right; }
   .hero-illustration img{
     width: min(520px, 100%);
@@ -206,6 +206,12 @@
     .navbar { height: 72px; }
     .restaurant-hero .hero-img-wrap img { height: 240px; }
   }
+  @media (min-width: 1200px){
+    .restaurant-hero {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+  }
   
   /* Promo banner */
 .promo-banner{
@@ -221,6 +227,24 @@
     background:#fff; color: var(--fh-accent-2);
   }
   
+  /* Mobile navbar menu fix */
+.navbar-collapse {
+    background-color: var(--fh-accent); /* stesso colore della navbar */
+    padding: 1rem;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #fff; /* testo bianco */
+  }
+  
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link.active {
+    color: var(--fh-highlight); /* highlight giallo */
+  }
+  
+
+
   /* Order status badges */
   .created-badge     { background: #e7f1ff; color:#0b5ed7; }
   .preparing-badge   { background: #fff3cd; color:#a15c00; }
