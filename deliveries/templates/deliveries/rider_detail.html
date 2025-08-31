@@ -34,12 +34,12 @@
         </div>
         <p class="small text-muted mb-3">Assigned at: {{ delivery.assigned_at }}</p>
 
-        <form method="post" action="{% url 'deliveries:rider_pick' delivery.pk %}" class="d-grid gap-2 mb-2">
+        <form method="post" action="{% url 'deliveries:rider_mark_picked' delivery.pk %}" class="d-grid gap-2 mb-2">
           {% csrf_token %}
           <button class="btn btn-primary" {% if delivery.status != 'ASSIGNED' %}disabled{% endif %}>Mark as PICKED_UP</button>
         </form>
 
-        <form method="post" action="{% url 'deliveries:rider_deliver' delivery.pk %}" class="d-grid gap-2">
+        <form method="post" action="{% url 'deliveries:rider_mark_delivered' delivery.pk %}" class="d-grid gap-2">
           {% csrf_token %}
           <button class="btn btn-success" {% if delivery.status != 'PICKED_UP' %}disabled{% endif %}>Mark as DELIVERED</button>
         </form>

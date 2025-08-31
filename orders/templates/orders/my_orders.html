@@ -13,7 +13,7 @@
             <small class="text-muted"> — {{ o.created_at }}</small>
           </div>
           <div class="ms-3">
-            <a class="btn btn-sm btn-outline-primary" href="{% url 'customer_order_detail' o.id %}">Track order</a>
+            <a class="btn btn-sm btn-outline-primary" href="{% url 'orders:customer_order_detail' o.id %}">Track order</a>
           </div>
         </div>
 

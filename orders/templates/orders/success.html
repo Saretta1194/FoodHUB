@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <section class="form-page">
   <div class="card form-card">
@@ -18,7 +19,7 @@
       {% endif %}
 
       <div class="d-grid gap-2 mt-4">
-        <a href="{% url 'customer_order_detail' order.id %}" class="btn btn-primary">Track your order</a>
+        <a href="{% url 'orders:customer_order_detail' order.id %}" class="btn btn-primary">Track your order</a>
         <a href="{% url 'restaurants:public_list' %}" class="btn btn-outline-secondary">Browse more restaurants</a>
       </div>
     </div>

@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
+{% load math_extras %}
+
 <h1 class="mb-3">Order #{{ order.id }}</h1>
 
 <div class="row g-3">
-  <!-- Colonna riepilogo -->
+  <!-- colum summary -->
   <div class="col-12 col-lg-8">
     <div class="card h-100">
       <div class="card-body">
@@ -39,7 +41,7 @@
     </div>
   </div>
 
-  <!-- Colonna stato / delivery -->
+  <!-- colum  delivery -->
   <div class="col-12 col-lg-4">
     <div class="card h-100">
       <div class="card-body">
