@@ -18,9 +18,7 @@ def operator_assign(request, order_id):
 
 def export_csv(request):
     response = HttpResponse(content_type="text/csv")
-    response["Content-Disposition"] = (
-        'attachment; filename="orders.csv"'
-    )
+    response["Content-Disposition"] = 'attachment; filename="orders.csv"'
     writer = csv.writer(response)
     writer.writerow(
         [
