@@ -53,9 +53,7 @@ def assign_rider(request, order_id):
     else:
         form = AssignRiderForm()
 
-    return render(
-        request, "deliveries/assign.html", {"order": order, "form": form}
-    )
+    return render(request, "deliveries/assign.html", {"order": order, "form": form})
 
 
 @login_required
@@ -87,9 +85,7 @@ class RiderDeliveryDetailView(
     context_object_name = "delivery"
 
 
-class RiderMarkPickedUpView(
-    LoginRequiredMixin, RiderDeliveryPermissionMixin, View
-):
+class RiderMarkPickedUpView(LoginRequiredMixin, RiderDeliveryPermissionMixin, View):
     """Set delivery to PICKED_UP and notify customer."""
 
     def post(self, request, pk):
@@ -104,14 +100,8 @@ class RiderMarkPickedUpView(
         order = delivery.order
         subject = f"Your order #{order.id} has been picked up"
         message = "Your order is on its way to you."
-        from_email = getattr(
-            settings,
-            "DEFAULT_FROM_EMAIL",
-            "no-reply@foodhub.local"
-        )
-        recipient_list = (
-            [order.user.email] if order.user.email else []
-        )
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
+        recipient_list = [order.user.email] if order.user.email else []
         if recipient_list:
             try:
                 send_mail(
@@ -128,9 +118,7 @@ class RiderMarkPickedUpView(
         return redirect("deliveries:rider_detail", pk=delivery.pk)
 
 
-class RiderMarkDeliveredView(
-    LoginRequiredMixin, RiderDeliveryPermissionMixin, View
-):
+class RiderMarkDeliveredView(LoginRequiredMixin, RiderDeliveryPermissionMixin, View):
     """Set delivery to DELIVERED and notify customer."""
 
     def post(self, request, pk):
@@ -145,9 +133,7 @@ class RiderMarkDeliveredView(
         order = delivery.order
         subject = f"Your order #{order.id} has been delivered"
         message = "Enjoy your meal! Your order has been delivered."
-        from_email = getattr(
-            settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local"
-        )
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
         recipient_list = [order.user.email] if order.user.email else []
         if recipient_list:
             try:
@@ -166,5 +152,5 @@ class RiderMarkDeliveredView(
 
 
 def operator_assign(request, order_id):
-   
+
     return render(request, "deliveries/operator_assign.html")

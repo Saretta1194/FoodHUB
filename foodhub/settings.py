@@ -16,15 +16,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-insecure-key-change-me")
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS", "localhost,127.0.0.1,.herokuapp.com"
-).split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,.herokuapp.com").split(
+    ","
+)
 
 # CSRF trusted origins (important for Heroku)
 CSRF_TRUSTED_ORIGINS = [
-    origin
-    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if origin
+    origin for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if origin
 ]
 
 # Applications
@@ -37,7 +35,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "crispy_bootstrap5",
-        
     # Project apps
     "core",
     "users",
@@ -73,7 +70,6 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "orders.context_processors.cart_item_count",
                 "core.context_processors.nav_flags",
-
             ],
         },
     },
@@ -101,22 +97,10 @@ AUTH_PASSWORD_VALIDATORS = [
         ),
     },
     {
-        "NAME": (
-            "django.contrib.auth.password_validation." "MinimumLengthValidator"
-        ),
+        "NAME": ("django.contrib.auth.password_validation." "MinimumLengthValidator"),
     },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "CommonPasswordValidator"
-        )
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "NumericPasswordValidator"
-        )
-    },
+    {"NAME": ("django.contrib.auth.password_validation." "CommonPasswordValidator")},
+    {"NAME": ("django.contrib.auth.password_validation." "NumericPasswordValidator")},
 ]
 
 # Email backend (dev)
@@ -141,16 +125,12 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Static & Media files
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "core" / "static"] 
+STATICFILES_DIRS = [BASE_DIR / "core" / "static"]
 
 if DEBUG:
-    STATICFILES_STORAGE = (
-        "django.contrib.staticfiles.storage." "StaticFilesStorage"
-    )
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage." "StaticFilesStorage"
 else:
-    STATICFILES_STORAGE = (
-        "whitenoise.storage." "CompressedManifestStaticFilesStorage"
-    )
+    STATICFILES_STORAGE = "whitenoise.storage." "CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -196,15 +176,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-insecure-key-change-me")
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS", "localhost,127.0.0.1,.herokuapp.com"
-).split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,.herokuapp.com").split(
+    ","
+)
 
 # CSRF trusted origins (important for Heroku)
 CSRF_TRUSTED_ORIGINS = [
-    origin
-    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if origin
+    origin for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if origin
 ]
 
 # Applications
@@ -217,7 +195,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "crispy_bootstrap5",
-        
     # Project apps
     "core",
     "users",
@@ -253,7 +230,6 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "orders.context_processors.cart_item_count",
                 "core.context_processors.nav_flags",
-
             ],
         },
     },
@@ -281,22 +257,10 @@ AUTH_PASSWORD_VALIDATORS = [
         ),
     },
     {
-        "NAME": (
-            "django.contrib.auth.password_validation." "MinimumLengthValidator"
-        ),
+        "NAME": ("django.contrib.auth.password_validation." "MinimumLengthValidator"),
     },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "CommonPasswordValidator"
-        )
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "NumericPasswordValidator"
-        )
-    },
+    {"NAME": ("django.contrib.auth.password_validation." "CommonPasswordValidator")},
+    {"NAME": ("django.contrib.auth.password_validation." "NumericPasswordValidator")},
 ]
 
 # Email backend (dev)
@@ -321,16 +285,12 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Static & Media files
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "core" / "static"] 
+STATICFILES_DIRS = [BASE_DIR / "core" / "static"]
 
 if DEBUG:
-    STATICFILES_STORAGE = (
-        "django.contrib.staticfiles.storage." "StaticFilesStorage"
-    )
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage." "StaticFilesStorage"
 else:
-    STATICFILES_STORAGE = (
-        "whitenoise.storage." "CompressedManifestStaticFilesStorage"
-    )
+    STATICFILES_STORAGE = "whitenoise.storage." "CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

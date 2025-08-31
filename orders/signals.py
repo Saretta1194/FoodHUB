@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Order
 
+
 @receiver(pre_save, sender=Order)
 def _store_old_status(sender, instance: Order, **kwargs):
     if instance.pk:
@@ -14,6 +15,7 @@ def _store_old_status(sender, instance: Order, **kwargs):
             instance._old_status = None
     else:
         instance._old_status = None
+
 
 @receiver(post_save, sender=Order)
 def _notify_order_status_change(sender, instance: Order, created, **kwargs):
@@ -32,8 +34,8 @@ def _notify_order_status_change(sender, instance: Order, created, **kwargs):
                 subj,
                 msg,
                 getattr(settings, "DEFAULT_FROM_EMAIL", None),
-                to, 
-                fail_silently=True
+                to,
+                fail_silently=True,
             )
         except Exception:
             pass

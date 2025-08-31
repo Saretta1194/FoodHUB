@@ -17,15 +17,9 @@ class AssignmentTests(TestCase):
         self.operator = User.objects.create_user(
             username="operator", password="pass123", is_staff=True
         )
-        self.owner = User.objects.create_user(
-            username="owner", password="pass123"
-        )
-        self.rider = User.objects.create_user(
-            username="rider", password="pass123"
-        )
-        self.customer = User.objects.create_user(
-            username="cust", password="pass123"
-        )
+        self.owner = User.objects.create_user(username="owner", password="pass123")
+        self.rider = User.objects.create_user(username="rider", password="pass123")
+        self.customer = User.objects.create_user(username="cust", password="pass123")
 
         # Restaurant and order
         self.rest = Restaurant.objects.create(
@@ -35,9 +29,7 @@ class AssignmentTests(TestCase):
             opening_hours="09:00-18:00",
             is_active=True,
         )
-        self.order = Order.objects.create(
-            user=self.customer, restaurant=self.rest
-        )
+        self.order = Order.objects.create(user=self.customer, restaurant=self.rest)
         OrderItem.objects.create(
             order=self.order,
             dish=Dish.objects.create(
@@ -54,9 +46,7 @@ class AssignmentTests(TestCase):
     def test_operator_can_assign_rider_and_event_logged(self):
         self.client.login(username="operator", password="pass123")
         url = reverse("deliveries:assign_rider", args=[self.order.id])
-        resp = self.client.post(
-            url, data={"rider": self.rider.id}, follow=True
-        )
+        resp = self.client.post(url, data={"rider": self.rider.id}, follow=True)
         self.assertEqual(resp.status_code, 200)
 
         d = Delivery.objects.get(order=self.order)
@@ -91,12 +81,8 @@ class OperatorPermissionTests(TestCase):
         self.staff = User.objects.create_user(
             username="operator", password="pass123", is_staff=True
         )
-        self.user = User.objects.create_user(
-            username="user", password="pass123"
-        )
-        self.owner = User.objects.create_user(
-            username="owner", password="pass123"
-        )
+        self.user = User.objects.create_user(username="user", password="pass123")
+        self.owner = User.objects.create_user(username="owner", password="pass123")
 
         # Restaurant + Order with one item
         self.rest = Restaurant.objects.create(

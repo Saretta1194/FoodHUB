@@ -12,9 +12,7 @@ User = get_user_model()
 
 class CheckoutTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="cust", password="pass123"
-        )
+        self.user = User.objects.create_user(username="cust", password="pass123")
         owner = User.objects.create_user(username="owner", password="pass123")
         self.rest = Restaurant.objects.create(
             owner=owner,

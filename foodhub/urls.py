@@ -40,10 +40,12 @@ urlpatterns = [
     path("privacy/", core_views.privacy, name="privacy"),
     path("terms/", core_views.terms, name="terms"),
     path("operator/export-csv/", core_views.export_csv, name="export_csv"),
-    path("operator/assign/<int:order_id>/", core_views.operator_assign, name="operator_assign"),
+    path(
+        "operator/assign/<int:order_id>/",
+        core_views.operator_assign,
+        name="operator_assign",
+    ),
     path("orders/", include(("orders.urls", "orders"), namespace="orders")),
-
-
 ]
 
 # need only in dev mode (DEBUG=True)

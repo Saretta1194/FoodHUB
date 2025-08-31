@@ -33,17 +33,13 @@ class Migration(migrations.Migration):
                     models.DecimalField(
                         decimal_places=2,
                         max_digits=6,
-                        validators=[
-                            django.core.validators.MinValueValidator(0.01)
-                        ],
+                        validators=[django.core.validators.MinValueValidator(0.01)],
                     ),
                 ),
                 ("available", models.BooleanField(default=True)),
                 (
                     "photo",
-                    models.ImageField(
-                        blank=True, null=True, upload_to="dishes/"
-                    ),
+                    models.ImageField(blank=True, null=True, upload_to="dishes/"),
                 ),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),

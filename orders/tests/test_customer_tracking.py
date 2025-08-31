@@ -9,17 +9,34 @@ from deliveries.models import Delivery, DeliveryEvent
 
 User = get_user_model()
 
+
 class CustomerTrackingTests(TestCase):
     def setUp(self):
         self.owner = User.objects.create_user(username="owner", password="pass123")
         self.cust = User.objects.create_user(username="cust", password="pass123")
         self.other = User.objects.create_user(username="other", password="pass123")
-        self.rest = Restaurant.objects.create(owner=self.owner, name="R", address="A", opening_hours="09:00-18:00", is_active=True)
-        self.dish = Dish.objects.create(restaurant=self.rest, name="Pasta", price=Decimal("10.00"), available=True)
+        self.rest = Restaurant.objects.create(
+            owner=self.owner,
+            name="R",
+            address="A",
+            opening_hours="09:00-18:00",
+            is_active=True,
+        )
+        self.dish = Dish.objects.create(
+            restaurant=self.rest, name="Pasta", price=Decimal("10.00"), available=True
+        )
         self.order = Order.objects.create(user=self.cust, restaurant=self.rest)
-        OrderItem.objects.create(order=self.order, dish=self.dish, dish_name="Pasta", unit_price=Decimal("10.00"), quantity=1)
+        OrderItem.objects.create(
+            order=self.order,
+            dish=self.dish,
+            dish_name="Pasta",
+            unit_price=Decimal("10.00"),
+            quantity=1,
+        )
         self.delivery = Delivery.objects.create(order=self.order)
-        DeliveryEvent.objects.create(delivery=self.delivery, event_type="STATUS_CHANGE", message="Assigned")
+        DeliveryEvent.objects.create(
+            delivery=self.delivery, event_type="STATUS_CHANGE", message="Assigned"
+        )
 
     def test_owner_only_access_for_customer_detail(self):
         self.client.login(username="other", password="pass123")

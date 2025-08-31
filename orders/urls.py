@@ -22,19 +22,24 @@ urlpatterns = [
     ),
     # Owner
     path("owner/", OwnerOrderListView.as_view(), name="owner_orders"),
-    path(
-        "owner/<int:pk>/", OwnerOrderDetailView.as_view(), name="owner_detail"
-    ),
+    path("owner/<int:pk>/", OwnerOrderDetailView.as_view(), name="owner_detail"),
     path(
         "owner/<int:pk>/prepare/",
         OwnerOrderPrepareView.as_view(),
         name="owner_prepare",
     ),
     path("export/csv/", views.export_orders_csv, name="export_orders_csv"),
-    
     # Client
     path("my/", views.my_orders, name="my_orders"),
     path("my/<int:pk>/", views.customer_order_detail, name="customer_order_detail"),
-    path("my/<int:pk>/status.json", views.customer_order_status_json, name="customer_order_status_json"),
-    path("customer/order/<int:order_id>/", views.customer_order_detail, name="customer_order_detail_by_id"),
+    path(
+        "my/<int:pk>/status.json",
+        views.customer_order_status_json,
+        name="customer_order_status_json",
+    ),
+    path(
+        "customer/order/<int:order_id>/",
+        views.customer_order_detail,
+        name="customer_order_detail_by_id",
+    ),
 ]

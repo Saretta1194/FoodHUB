@@ -17,12 +17,8 @@ class OwnerPrepareTests(TestCase):
             password="pass123",
             email="cust@example.com",
         )
-        self.owner = User.objects.create_user(
-            username="owner", password="pass123"
-        )
-        self.other = User.objects.create_user(
-            username="other", password="pass123"
-        )
+        self.owner = User.objects.create_user(username="owner", password="pass123")
+        self.other = User.objects.create_user(username="other", password="pass123")
 
         self.rest = Restaurant.objects.create(
             owner=self.owner,

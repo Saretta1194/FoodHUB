@@ -1,6 +1,7 @@
 # core/context_processors.py
 from deliveries.models import Delivery
 
+
 def nav_flags(request):
     user = request.user
     if not user.is_authenticated:
@@ -11,7 +12,11 @@ def nav_flags(request):
             "rider_delivery_count": 0,
         }
 
-    owner_count = getattr(user, "restaurants", None).count() if hasattr(user, "restaurants") else 0
+    owner_count = (
+        getattr(user, "restaurants", None).count()
+        if hasattr(user, "restaurants")
+        else 0
+    )
     rider_count = Delivery.objects.filter(rider=user).only("id").count()
 
     return {

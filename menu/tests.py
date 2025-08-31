@@ -10,12 +10,8 @@ User = get_user_model()
 class DishTests(TestCase):
 
     def setUp(self):
-        self.owner = User.objects.create_user(
-            username="owner", password="pass123"
-        )
-        self.other = User.objects.create_user(
-            username="other", password="pass123"
-        )
+        self.owner = User.objects.create_user(username="owner", password="pass123")
+        self.other = User.objects.create_user(username="other", password="pass123")
         self.restaurant = Restaurant.objects.create(
             owner=self.owner,
             name="Test Risto",
@@ -36,9 +32,7 @@ class DishTests(TestCase):
                 "available": True,
             },
         )
-        self.assertContains(
-            resp, "Ensure this value is greater than or equal to 0.01"
-        )
+        self.assertContains(resp, "Ensure this value is greater than or equal to 0.01")
         self.assertFalse(Dish.objects.filter(name="Bad Dish").exists())
 
     def test_only_owner_can_create_dish(self):
@@ -74,9 +68,7 @@ class DishTests(TestCase):
 
         # POST to confirm deletion
         resp = self.client.post(url, follow=True)
-        self.assertRedirects(
-            resp, reverse("menu:dish_list", args=[self.restaurant.id])
-        )
+        self.assertRedirects(resp, reverse("menu:dish_list", args=[self.restaurant.id]))
         self.assertFalse(Dish.objects.filter(id=dish.id).exists())
 
     def test_non_owner_cannot_delete_dish(self):

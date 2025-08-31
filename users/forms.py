@@ -24,10 +24,6 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ("phone", "address")
         widgets = {
-            "phone": forms.TextInput(
-                attrs={"placeholder": "e.g. +41 79 123 45 67"}
-            ),
-            "address": forms.TextInput(
-                attrs={"placeholder": "Street, number, city"}
-            ),
+            "phone": forms.TextInput(attrs={"placeholder": "e.g. +41 79 123 45 67"}),
+            "address": forms.TextInput(attrs={"placeholder": "Street, number, city"}),
         }

@@ -14,8 +14,6 @@ from django.utils.dateparse import parse_date
 from django.utils import timezone
 
 
-
-
 from menu.models import Dish
 from .models import Order, OrderItem
 
@@ -55,9 +53,7 @@ def cart_detail(request):
             }
         )
 
-    return render(
-        request, "orders/cart_detail.html", {"items": items, "total": total}
-    )
+    return render(request, "orders/cart_detail.html", {"items": items, "total": total})
 
 
 @require_POST
@@ -119,17 +115,13 @@ def checkout(request):
         # Enforce single-restaurant cart
         restaurants = {d.restaurant_id for d in dishes}
         if len(restaurants) != 1:
-            messages.error(
-                request, "Cart must contain items from a single restaurant."
-            )
+            messages.error(request, "Cart must contain items from a single restaurant.")
             return redirect("orders:cart_detail")
 
         restaurant_id = restaurants.pop()
 
         # 1) Create order linked to that restaurant
-        order = Order.objects.create(
-            user=request.user, restaurant_id=restaurant_id
-        )
+        order = Order.objects.create(user=request.user, restaurant_id=restaurant_id)
 
         # 2) Snapshot items
         for dish in dishes:
@@ -172,9 +164,7 @@ def checkout(request):
             }
         )
 
-    return render(
-        request, "orders/checkout.html", {"items": items, "total": total}
-    )
+    return render(request, "orders/checkout.html", {"items": items, "total": total})
 
 
 @login_required
@@ -210,14 +200,12 @@ class OwnerOrderListView(LoginRequiredMixin, ListView):
     context_object_name = "orders"
 
     def get_queryset(self):
-        return Order.objects.filter(
-            restaurant__owner=self.request.user
-        ).order_by("-created_at")
+        return Order.objects.filter(restaurant__owner=self.request.user).order_by(
+            "-created_at"
+        )
 
 
-class OwnerOrderDetailView(
-    LoginRequiredMixin, OwnerOrderPermissionMixin, DetailView
-):
+class OwnerOrderDetailView(LoginRequiredMixin, OwnerOrderPermissionMixin, DetailView):
     """Detail of a single order for the owner."""
 
     model = Order
@@ -225,9 +213,7 @@ class OwnerOrderDetailView(
     context_object_name = "order"
 
 
-class OwnerOrderPrepareView(
-    LoginRequiredMixin, OwnerOrderPermissionMixin, View
-):
+class OwnerOrderPrepareView(LoginRequiredMixin, OwnerOrderPermissionMixin, View):
     """
     Advance an order forward to PREPARING (from CREATED/PAID).
     Notify customer via email (console backend in development).
@@ -244,9 +230,7 @@ class OwnerOrderPrepareView(
         # Notify customer by email (printed to console in development)
         subject = f"Your order #{order.id} is now PREPARING"
         message = "Good news! Your order is being prepared."
-        from_email = getattr(
-            settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local"
-        )
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
         recipient_list = [order.user.email] if order.user.email else []
         if recipient_list:
             try:
@@ -261,9 +245,7 @@ class OwnerOrderPrepareView(
                 # In development, ignore email failures
                 pass
 
-        messages.success(
-            request, "Order moved to PREPARING and customer notified."
-        )
+        messages.success(request, "Order moved to PREPARING and customer notified.")
         return redirect("orders:owner_detail", pk=order.pk)
 
 
@@ -278,17 +260,25 @@ def _ensure_order_owner(request, order):
     if order.user_id != request.user.id:
         raise Http404()
 
+
 @login_required
 def customer_order_detail(request, pk):
-    order = get_object_or_404(Order.objects.select_related("restaurant").prefetch_related("items"), pk=pk)
+    order = get_object_or_404(
+        Order.objects.select_related("restaurant").prefetch_related("items"), pk=pk
+    )
     _ensure_order_owner(request, order)
     delivery = getattr(order, "delivery", None)
     events = delivery.events.all() if delivery else []
-    return render(request, "orders/customer_order_detail.html", {
-        "order": order,
-        "delivery": delivery,
-        "events": events,
-    })
+    return render(
+        request,
+        "orders/customer_order_detail.html",
+        {
+            "order": order,
+            "delivery": delivery,
+            "events": events,
+        },
+    )
+
 
 @login_required
 def customer_order_status_json(request, pk):
@@ -301,11 +291,16 @@ def customer_order_status_json(request, pk):
         "delivery_status": getattr(delivery, "status", None),
         "rider": getattr(getattr(delivery, "rider", None), "username", None),
         "events": [
-            {"at": ev.created_at.isoformat(), "type": ev.event_type, "message": ev.message}
+            {
+                "at": ev.created_at.isoformat(),
+                "type": ev.event_type,
+                "message": ev.message,
+            }
             for ev in (delivery.events.all() if delivery else [])
         ],
     }
     return JsonResponse(data)
+
 
 @staff_member_required
 def export_orders_csv(request):
@@ -329,19 +324,31 @@ def export_orders_csv(request):
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
 
     writer = csv.writer(response)
-    writer.writerow(["id","created_at","user","restaurant","status","total_items","total_amount"])
+    writer.writerow(
+        [
+            "id",
+            "created_at",
+            "user",
+            "restaurant",
+            "status",
+            "total_items",
+            "total_amount",
+        ]
+    )
 
     for o in qs:
         total_items = sum(i.quantity for i in o.items.all())
         total_amount = sum(i.unit_price * i.quantity for i in o.items.all())
-        writer.writerow([
-            o.id,
-            timezone.localtime(o.created_at).isoformat(),
-            getattr(o.user, "username", ""),
-            getattr(o.restaurant, "name", ""),
-            o.status,
-            total_items,
-            f"{total_amount:.2f}",
-        ])
+        writer.writerow(
+            [
+                o.id,
+                timezone.localtime(o.created_at).isoformat(),
+                getattr(o.user, "username", ""),
+                getattr(o.restaurant, "name", ""),
+                o.status,
+                total_items,
+                f"{total_amount:.2f}",
+            ]
+        )
 
     return response

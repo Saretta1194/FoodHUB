@@ -74,13 +74,9 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name="items"
-    )
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
 
-    dish = models.ForeignKey(
-        Dish, on_delete=models.PROTECT, related_name="order_items"
-    )
+    dish = models.ForeignKey(Dish, on_delete=models.PROTECT, related_name="order_items")
 
     dish_name = models.CharField(max_length=200)
     unit_price = models.DecimalField(max_digits=6, decimal_places=2)

@@ -41,9 +41,7 @@ class OwnerDishMixin(LoginRequiredMixin):
 
     def get_success_url(self):
         restaurant = self.get_restaurant()
-        return reverse(
-            "menu:dish_list", kwargs={"restaurant_id": restaurant.id}
-        )
+        return reverse("menu:dish_list", kwargs={"restaurant_id": restaurant.id})
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Dish deleted successfully!")

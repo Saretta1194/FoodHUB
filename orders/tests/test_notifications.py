@@ -6,12 +6,21 @@ from orders.models import Order
 
 User = get_user_model()
 
+
 @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 class OrderEmailSignalTests(TestCase):
     def setUp(self):
         self.owner = User.objects.create_user(username="owner", password="x")
-        self.customer = User.objects.create_user(username="cust", password="x", email="cust@example.com")
-        self.rest = Restaurant.objects.create(owner=self.owner, name="R", address="A", opening_hours="09-18", is_active=True)
+        self.customer = User.objects.create_user(
+            username="cust", password="x", email="cust@example.com"
+        )
+        self.rest = Restaurant.objects.create(
+            owner=self.owner,
+            name="R",
+            address="A",
+            opening_hours="09-18",
+            is_active=True,
+        )
         self.order = Order.objects.create(user=self.customer, restaurant=self.rest)
 
     def test_email_sent_on_order_status_change(self):
