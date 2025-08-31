@@ -19,6 +19,8 @@
         <div class="card h-100">
           {% if d.photo %}
             <img src="{{ d.photo.url }}" class="card-img-top" alt="{{ d.name }}">
+          {% else %}
+            <img src="{% static 'img/placeholder.png' %}" class="card-img-top" alt="{{ d.name }}">
           {% endif %}
           <div class="card-body d-flex flex-column">
             <h5 class="card-title">{{ d.name }}</h5>

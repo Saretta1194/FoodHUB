@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <h1 class="mb-3">Restaurants</h1>
 
@@ -9,34 +10,44 @@
         <div class="card h-100">
           {% if r.cover_image %}
             <img src="{{ r.cover_image.url }}" class="card-img-top" alt="{{ r.name }}">
+          {% else %}
+            <img src="{% static 'core/img/placeholder.png' %}" class="card-img-top" alt="{{ r.name }}">
           {% endif %}
-          <div class="card-body">
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title">{{ r.name }}</h5>
             {% if r.description %}
               <p class="card-text">{{ r.description|truncatechars:120 }}</p>
             {% endif %}
-            <p class="card-text"><small class="text-muted">{{ r.address }}</small></p>
-            <a href="{% url 'restaurants:public_detail' r.id %}" class="btn btn-primary">View menu</a>
+            <p class="card-text text-muted mb-3">{{ r.address }}</p>
+            <a href="{% url 'restaurants:public_detail' r.id %}" class="btn btn-primary mt-auto">View menu</a>
           </div>
         </div>
       </div>
     {% endfor %}
   </div>
 
+  {# Bootstrap pagination #}
   {% if is_paginated %}
-    <nav class="mt-3">
-      <ul class="pagination">
-        {% if page_obj.has_previous %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-        {% endif %}
-        <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span></li>
-        {% if page_obj.has_next %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-        {% endif %}
-      </ul>
-    </nav>
+  <nav aria-label="Restaurants pages">
+    <ul class="pagination justify-content-center mt-4">
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+      {% endif %}
+      <li class="page-item active">
+        <span class="page-link">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+      </li>
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
   {% endif %}
+
 {% else %}
-  <div class="alert alert-info">No restaurants available.</div>
+  <div class="alert alert-info">No active restaurants right now.</div>
 {% endif %}
 {% endblock %}

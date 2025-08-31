@@ -28,12 +28,13 @@
 
   /*Navbar*/
   .navbar{
+    height: 80px;
     background-color: #FFA55D;
-    min-height: 64px;
   }
   .navbar .navbar-brand img{
-    height: 56px;
+    height: 60px;
     width: auto;
+    object-fit: contain;
   }
   
 /* Navbar active/hover */
