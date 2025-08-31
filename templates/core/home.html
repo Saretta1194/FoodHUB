@@ -1,60 +1,93 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block content %}
 
-<section class="py-5" style="background: var(--fh-bg-soft); border-radius: 12px;">
-  <div class="container-narrow">
-    <div class="row align-items-center g-4">
-      <div class="col-12 col-lg-7">
-        <h1 class="display-6 mb-2">FoodHub — good food, fast.</h1>
-        <p class="lead text-muted">
-          Discover local restaurants, browse menus, add dishes to your cart and get your meal delivered hot and fresh.
-          Simple, transparent, delicious.
-        </p>
-        <div class="d-flex gap-2 mt-3">
-          <a href="{% url 'restaurants:public_list' %}" class="btn btn-primary btn-lg">Browse restaurants</a>
-          {% if user.is_authenticated %}
-            <a href="{% url 'orders:my_orders' %}" class="btn btn-outline-secondary btn-lg">My orders</a>
-          {% else %}
-            <a href="{% url 'signup' %}" class="btn btn-outline-secondary btn-lg">Create account</a>
-          {% endif %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <h1 class="hero-title reveal">GOOD FOOD...<br class="d-none d-md-block"> FAST</h1>
+      <p class="hero-subtitle reveal">
+        Discover local restaurants, browse menus, add dishes to your cart and get your meal delivered hot and fresh.
+        Simple, transparent, delicious.
+      </p>
+      <div class="hero-cta reveal">
+        <a href="{% url 'restaurants:public_list' %}" class="btn btn-primary btn-lg">Browse restaurants</a>
+        <a href="{% url 'orders:my_orders' %}" class="btn btn-outline-secondary btn-lg">My orders</a>
+      </div>
+    </div>
+
+    <div class="hero-illustration">
+      <img src="{% static 'core/img/hero-illustration.png' %}"
+           alt="Courier delivering hot food"
+           loading="lazy"
+           class="floating reveal is-visible">
+    </div>
+  </div>
+</section>
+
+<!-- WHY FOODHUB -->
+<section class="why">
+  <h2 class="section-title reveal">Why FoodHub?</h2>
+  <div class="row g-3">
+    <div class="col-12 col-md-4">
+      <div class="card h-100 reveal">
+        <div class="card-body">
+          <h3 class="card-title">Handpicked restaurants</h3>
+          <p class="card-text">We highlight quality places near you so choosing is easy.</p>
         </div>
       </div>
-      <div class="col-12 col-lg-5">
-        <img src="{% static 'img/hero-illustration.png' %}" alt="Delivery" class="img-fluid rounded">
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card h-100 reveal">
+        <div class="card-body">
+          <h3 class="card-title">Up-to-date menus</h3>
+          <p class="card-text">Owners manage menus and availability in real time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card h-100 reveal">
+        <div class="card-body">
+          <h3 class="card-title">Transparent checkout</h3>
+          <p class="card-text">We snapshot prices at checkout. What you see is what you pay.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="container-narrow py-4">
-  <h2 class="h4 mb-3">Why FoodHub?</h2>
+<!-- RESTAURANTS HIGHLIGHT -->
+{% if restaurants %}
+<section class="home-restos">
+  <div class="d-flex justify-content-between align-items-center mb-2 reveal">
+    <h2 class="section-title m-0">Popular restaurants</h2>
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'restaurants:public_list' %}">View all</a>
+  </div>
+
   <div class="row g-3">
-    <div class="col-12 col-md-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">Handpicked restaurants</h5>
-          <p class="text-muted small mb-0">We highlight quality places near you so choosing is easy.</p>
+    {% for r in restaurants %}
+      <div class="col-12 col-md-6 col-lg-4 reveal">
+        <div class="card h-100">
+          {% if r.cover_image %}
+            <img src="{{ r.cover_image.url }}" class="restaurant-card-img" alt="{{ r.name }}">
+          {% else %}
+            <img src="{% static 'img/placeholder-restaurant.jpg' %}" class="restaurant-card-img" alt="{{ r.name }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ r.name }}</h5>
+            <p class="card-text text-muted small mb-2">{{ r.address }}</p>
+            {% if r.description %}
+              <p class="card-text">{{ r.description|truncatechars:100 }}</p>
+            {% endif %}
+            <a href="{% url 'restaurants:public_detail' r.id %}" class="btn btn-primary">View menu</a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-12 col-md-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">Up-to-date menus</h5>
-          <p class="text-muted small mb-0">Owners manage menus and availability in real time.</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">Transparent checkout</h5>
-          <p class="text-muted small mb-0">We snapshot prices at checkout. What you see is what you pay.</p>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </section>
+{% endif %}
 
 {% endblock %}

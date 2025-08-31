@@ -2,9 +2,15 @@
 <!doctype html>
 <html lang="en">
 <head>
+
   <meta charset="utf-8">
   <title>FoodHub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="{% static 'core/img/favicon.png' %}">
+  <meta name="foodHub" content="FoodHub — browse restaurants, order your favourite dishes, and track delivery in real time.">
+  <meta property="og:title" content="FoodHub">
+  <meta property="og:description" content="Good food, fast.">
+  <meta property="og:type" content="website">
 
   <!-- Google Font: Poppins -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -167,5 +173,35 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/acd11ec600.js" crossorigin="anonymous"></script>
+<!--Jvscript-->
+  <script>
+    const nav = document.querySelector('.navbar');
+    const onScroll = () => { if (!nav) return; nav.classList.toggle('is-scrolled', window.scrollY > 8); };
+    document.addEventListener('scroll', onScroll); onScroll();
+    
+    // Reveal elements on scroll
+    const io = new IntersectionObserver((entries)=> {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+    },{ threshold: .08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    
+    // Ripple click position
+    document.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.btn'); if(!btn) return;
+      const rect = btn.getBoundingClientRect();
+      btn.style.setProperty('--x', (e.clientX - rect.left) + 'px');
+      btn.style.setProperty('--y', (e.clientY - rect.top) + 'px');
+    }, {capture:true});
+    
+    // Function to pulse cart pill
+    window.pulseCart = () => {
+      const pill = document.querySelector('.cart-pill');
+      if(!pill) return;
+      pill.classList.remove('pulse'); void pill.offsetWidth; // restart animation
+      pill.classList.add('pulse');
+    };
+    </script>
+    
+
 </body>
 </html>

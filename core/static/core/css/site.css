@@ -29,12 +29,8 @@
     color: #fff;
     font-size: 0.9rem;
   }
-  .site-footer a {
-    color: #fff;
-  }
-  .site-footer a:hover {
-    text-decoration: underline;
-  }
+  .site-footer a { color: #fff; }
+  .site-footer a:hover { text-decoration: underline; }
   
   /* Containers / sections helpers */
   .container-narrow { max-width: 920px; margin: 0 auto; }
@@ -73,19 +69,61 @@
   .card {
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   }
-  .card-title { font-weight: 600; color: #A76545; } /* main palette */
+  .card-title { font-weight: 600; color: #A76545; }
   .price-tag { font-size: 1.1rem; font-weight: 700; color: var(--fh-accent); }
   
   /* Restaurant cover (list cards) */
   .restaurant-card-img {
     width: 100%;
     height: 220px;       /* fixed cover height */
-    object-fit: cover;   /* crop without distortion */
+    object-fit: cover;
   }
   
-  /* Restaurant hero (detail page) */
+  /* ===== Hero (homepage) ===== */
+  .hero{
+    background: var(--fh-bg-soft);
+    border-radius: 16px;
+    padding: 2rem 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+  @media (min-width: 768px){
+    .hero{
+      padding: 2.5rem 2rem;
+      margin-bottom: 2rem;
+    }
+  }
+  .hero-inner{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  @media (min-width: 992px){
+    .hero-inner{ grid-template-columns: 1.15fr 0.85fr; }
+  }
+  .hero-title{
+    font-size: clamp(2rem, 3.2vw + 1rem, 3rem);
+    line-height: 1.15;
+    margin: 0 0 .5rem 0;
+  }
+  .hero-subtitle{
+    font-size: 1.125rem;
+    color: var(--fh-muted);
+    max-width: 58ch;
+    margin-bottom: 1rem;
+  }
+  .hero-cta .btn{ margin-right: .5rem; }
+  .hero-illustration{ text-align: right; }
+  .hero-illustration img{
+    width: min(520px, 100%);
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    object-fit: cover;
+  }
+  
+  /* ===== Restaurant hero (detail page) ===== */
   .restaurant-hero .hero-img-wrap {
     width: 100%;
     max-height: 360px;
@@ -100,6 +138,17 @@
     object-fit: cover;
     display: block;
   }
+  
+  /* Sections spacing */
+  .section-title{ margin: 0 0 .75rem 0; }
+  .why{ margin-bottom: 2rem; }
+  .home-restos{ margin-top: 1.5rem; }
+  
+  /* Cards balance */
+  .card-text.small{ font-size: .95rem; }
+  
+  /* Header brand alignment fix on small screens */
+  .navbar-brand img{ max-height: 48px; }
   
   /* Dish image (detail grid) */
   .dish-card .ratio { background: #f7f3ee; }
@@ -132,7 +181,7 @@
   
   /* Form page layout (signup/login/profile/checkout) */
   .form-page{
-    min-height: calc(100vh - 160px); /* header+footer approx */
+    min-height: calc(100vh - 160px);
     display: grid;
     place-items: center;
     padding: 2rem 0;
@@ -160,9 +209,10 @@
   }
   
   /* Order status badges */
-.created-badge     { background: #e7f1ff; color:#0b5ed7; }
-.preparing-badge   { background: #fff3cd; color:#a15c00; }
-.assigned-badge    { background: #e7f1ff; color:#0b5ed7; }
-.picked_up-badge   { background: #e2f0e7; color:#1e7e34; }
-.delivered-badge   { background: #d1f7d6; color:#146c43; }
-.cancelled-badge   { background: #fde2e2; color:#b02a37; }
+  .created-badge     { background: #e7f1ff; color:#0b5ed7; }
+  .preparing-badge   { background: #fff3cd; color:#a15c00; }
+  .assigned-badge    { background: #e7f1ff; color:#0b5ed7; }
+  .picked_up-badge   { background: #e2f0e7; color:#1e7e34; }
+  .delivered-badge   { background: #d1f7d6; color:#146c43; }
+  .cancelled-badge   { background: #fde2e2; color:#b02a37; }
+  
