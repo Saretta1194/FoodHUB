@@ -1,41 +1,53 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Delivery for Order #{{ delivery.order.id }}</h1>
+<h1 class="mb-3">Delivery for Order #{{ delivery.order.id }}</h1>
 
-<p><strong>Status:</strong> {{ delivery.status }}</p>
-<p><strong>Restaurant:</strong> {{ delivery.order.restaurant.name }}</p>
-<p><strong>Customer:</strong> {{ delivery.order.user.username }}</p>
+<div class="row g-3">
+  <div class="col-12 col-lg-8">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5">Restaurant</h2>
+        <p class="mb-1">{{ delivery.order.restaurant.name }}</p>
+        <p class="text-muted">{{ delivery.order.restaurant.address }}</p>
 
-<h2>Items</h2>
-<ul>
-  {% for it in delivery.order.items.all %}
-    <li>{{ it.dish_name }} × {{ it.quantity }} @ {{ it.unit_price|floatformat:2 }}</li>
-  {% endfor %}
-</ul>
+        <hr>
+        <h2 class="h5">Items</h2>
+        {% if delivery.order.items.all %}
+          <ul class="mb-0">
+            {% for it in delivery.order.items.all %}
+              <li>{{ it.dish_name }} × {{ it.quantity }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="alert alert-info">No items on this order.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 
-<h2>Actions</h2>
-{% if delivery.status == "ASSIGNED" %}
-  <form method="post" action="{% url 'deliveries:rider_mark_picked' delivery.pk %}">
-    {% csrf_token %}
-    <button type="submit">Mark as PICKED_UP</button>
-  </form>
-{% elif delivery.status == "PICKED_UP" %}
-  <form method="post" action="{% url 'deliveries:rider_mark_delivered' delivery.pk %}">
-    {% csrf_token %}
-    <button type="submit">Mark as DELIVERED</button>
-  </form>
-{% else %}
-<div class="alert alert-info">No further actions available.</div>
-{% endif %}
+  <div class="col-12 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5">Status</h2>
+        <div class="mb-2">
+          <span class="badge text-bg-secondary">{{ delivery.status }}</span>
+        </div>
+        <p class="small text-muted mb-3">Assigned at: {{ delivery.assigned_at }}</p>
 
-<h2>Timeline</h2>
-<ul>
-  {% for ev in delivery.events.all %}
-    <li>{{ ev.created_at }} — {{ ev.event_type }} — {{ ev.message }}</li>
-  {% empty %}
-    <li>No events yet.</li>
-  {% endfor %}
-</ul>
+        <form method="post" action="{% url 'deliveries:rider_pick' delivery.pk %}" class="d-grid gap-2 mb-2">
+          {% csrf_token %}
+          <button class="btn btn-primary" {% if delivery.status != 'ASSIGNED' %}disabled{% endif %}>Mark as PICKED_UP</button>
+        </form>
 
-<p><a href="{% url 'deliveries:rider_deliveries' %}">&larr; Back to my deliveries</a></p>
+        <form method="post" action="{% url 'deliveries:rider_deliver' delivery.pk %}" class="d-grid gap-2">
+          {% csrf_token %}
+          <button class="btn btn-success" {% if delivery.status != 'PICKED_UP' %}disabled{% endif %}>Mark as DELIVERED</button>
+        </form>
+
+        <hr>
+        <a href="{% url 'deliveries:rider_deliveries' %}" class="btn btn-outline-secondary w-100 mt-2">Back to My deliveries</a>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

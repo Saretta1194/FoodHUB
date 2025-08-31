@@ -1,15 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Order placed!</h1>
-<p>Order #{{ order.id }} has been created with status <strong>{{ order.status }}</strong>.</p>
-<p><strong>Total:</strong> {{ order.total_amount|floatformat:2 }}</p>
+<section class="form-page">
+  <div class="card form-card">
+    <div class="card-body p-4 p-md-5 text-center">
+      <h1 class="h4 mb-3">Thank you! 🎉</h1>
+      <p>Your order has been created successfully.</p>
 
-<h2>Items</h2>
-<ul>
-  {% for item in order.items.all %}
-    <li>{{ item.dish_name }} — {{ item.quantity }} × {{ item.unit_price|floatformat:2 }} = {{ item.total_price|floatformat:2 }}</li>
-  {% endfor %}
-</ul>
+      <div class="my-3">
+        <div class="d-inline-block px-3 py-2 rounded border">
+          <strong>Order #{{ order.id }}</strong>
+        </div>
+      </div>
 
-<p><a href="{% url 'restaurants:public_list' %}">Back to restaurants</a></p>
+      {% if order.restaurant %}
+        <p class="text-muted mb-1">{{ order.restaurant.name }}</p>
+        <p class="text-muted">{{ order.created_at }}</p>
+      {% endif %}
+
+      <div class="d-grid gap-2 mt-4">
+        <a href="{% url 'customer_order_detail' order.id %}" class="btn btn-primary">Track your order</a>
+        <a href="{% url 'restaurants:public_list' %}" class="btn btn-outline-secondary">Browse more restaurants</a>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}
