@@ -1,3 +1,4 @@
+# deliveries/views.py
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
@@ -5,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse
 from orders.models import Order
 from .models import Delivery, DeliveryEvent
 from .forms import AssignRiderForm
@@ -101,7 +101,7 @@ class RiderMarkPickedUpView(LoginRequiredMixin, RiderDeliveryPermissionMixin, Vi
         subject = f"Your order #{order.id} has been picked up"
         message = "Your order is on its way to you."
         from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
-        recipient_list = [order.user.email] if order.user.email else []
+        recipient_list = [order.user.email] if getattr(order.user, "email", None) else []
         if recipient_list:
             try:
                 send_mail(
@@ -134,7 +134,7 @@ class RiderMarkDeliveredView(LoginRequiredMixin, RiderDeliveryPermissionMixin, V
         subject = f"Your order #{order.id} has been delivered"
         message = "Enjoy your meal! Your order has been delivered."
         from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
-        recipient_list = [order.user.email] if order.user.email else []
+        recipient_list = [order.user.email] if getattr(order.user, "email", None) else []
         if recipient_list:
             try:
                 send_mail(
@@ -151,6 +151,48 @@ class RiderMarkDeliveredView(LoginRequiredMixin, RiderDeliveryPermissionMixin, V
         return redirect("deliveries:rider_detail", pk=delivery.pk)
 
 
-def operator_assign(request, order_id):
+@staff_member_required
+def operator_assign(request, pk):
+    """
+    Operator assigns (or reassigns) a rider to an existing delivery.
+    Creates a DeliveryEvent and moves status to ASSIGNED if needed.
+    """
+    delivery = get_object_or_404(Delivery, pk=pk)
 
-    return render(request, "deliveries/operator_assign.html")
+    if request.method == "POST":
+        form = AssignRiderForm(request.POST)
+        if form.is_valid():
+            rider = form.cleaned_data["rider"]
+
+            # Assign / reassign rider
+            delivery.rider = rider
+
+            # Move to ASSIGNED if still at initial state
+            if delivery.status != Delivery.STATUS_ASSIGNED:
+                delivery.status = Delivery.STATUS_ASSIGNED
+
+            delivery.save()  # avoid update_fields to prevent mismatch with model fields
+
+            # Log event
+            DeliveryEvent.objects.create(
+                delivery=delivery,
+                event_type=DeliveryEvent.EVENT_ASSIGNED,
+                message=f"Rider assigned: {rider.username}",
+                actor=request.user,
+            )
+
+            messages.success(
+                request,
+                f"Rider '{rider.username}' assigned to delivery #{delivery.id}.",
+            )
+            return redirect("deliveries:operator_queue")
+    else:
+        # Preselect current rider if present
+        initial = {"rider": delivery.rider_id} if delivery.rider_id else None
+        form = AssignRiderForm(initial=initial)
+
+    return render(
+        request,
+        "deliveries/operator_assign.html",
+        {"delivery": delivery, "form": form},
+    )

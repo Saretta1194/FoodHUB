@@ -1,24 +1,84 @@
-{# templates/restaurants/owner_list.html #}
 {% extends "base.html" %}
 {% block content %}
-  <h1>My Restaurants</h1>
-  <p><a href="{% url 'restaurants:create' %}">Create new restaurant</a></p>
-  {% if restaurants %}
-    <ul>
-      {% for r in restaurants %}
-        <li>
-          <strong>{{ r.name }}</strong> — {{ r.address }} — {{ r.opening_hours }}
-          {% if r.is_active %}<em>(active)</em>{% else %}<em>(inactive)</em>{% endif %}
-          <div>
-            <a href="{% url 'restaurants:edit' r.pk %}">Edit</a> |
-            <a href="{% url 'restaurants:delete' r.pk %}">Delete</a>
-            <a href="{% url 'menu:dish_list' r.id %}">Manage dishes</a>
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <h1 class="mb-0">My Restaurants</h1>
+  <a href="{% url 'restaurants:owner_create' %}" class="btn btn-primary">
+    + Create new restaurant
+  </a>
+</div>
+
+{% if restaurants %}
+  <div class="row g-3">
+    {% for r in restaurants %}
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body d-flex flex-wrap gap-3 align-items-start justify-content-between">
+
+            <!-- Left: main info -->
+            <div class="me-auto">
+              <h5 class="card-title mb-1 d-flex align-items-center gap-2">
+                {{ r.name }}
+                {% if r.is_active %}
+                  <span class="badge bg-success">active</span>
+                {% else %}
+                  <span class="badge bg-secondary">inactive</span>
+                {% endif %}
+              </h5>
+              <div class="text-muted small">
+                <span>{{ r.address }}</span>
+                {% if r.opening_hours %}
+                  <span class="mx-1">—</span>
+                  <span>{{ r.opening_hours }}</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Right: actions -->
+            <div class="d-flex flex-wrap gap-2">
+              <a href="{% url 'menu:dish_list' r.id %}" class="btn btn-outline-primary">
+                Manage dishes
+              </a>
+              <a href="{% url 'restaurants:owner_update' r.id %}" class="btn btn-outline-secondary">
+                Edit
+              </a>
+
+              <!-- Delete as POST to avoid accidental clicks -->
+              <form method="post" action="{% url 'restaurants:owner_delete' r.id %}" onsubmit="return confirm('Delete {{ r.name }}?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+              </form>
+            </div>
+
           </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+    <nav aria-label="Restaurants pages">
+      <ul class="pagination justify-content-center mt-3">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          </li>
+        {% endif %}
+        <li class="page-item active">
+          <span class="page-link">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
         </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-  <div class="alert alert-info">No restaurants yet.</div>
-    
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
   {% endif %}
+
+{% else %}
+  <div class="alert alert-info">No restaurants yet. Create your first one!</div>
+{% endif %}
+
 {% endblock %}
+

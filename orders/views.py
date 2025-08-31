@@ -13,10 +13,8 @@ from django.http import JsonResponse, Http404, HttpResponse
 from django.utils.dateparse import parse_date
 from django.utils import timezone
 
-
 from menu.models import Dish
 from .models import Order, OrderItem
-
 
 # Session cart key, e.g. {"12": 2, "35": 1}
 CART_SESSION_KEY = "cart"
@@ -131,8 +129,8 @@ def checkout(request):
             OrderItem.objects.create(
                 order=order,
                 dish=dish,
-                dish_name=dish.name,  # snapshot name
-                unit_price=dish.price,  # snapshot price
+                dish_name=dish.name,   # snapshot name
+                unit_price=dish.price, # snapshot price
                 quantity=qty,
             )
 
@@ -194,7 +192,6 @@ class OwnerOrderPermissionMixin(UserPassesTestMixin):
 
 class OwnerOrderListView(LoginRequiredMixin, ListView):
     """List orders for all restaurants owned by the current user."""
-
     model = Order
     template_name = "orders/owner_list.html"
     context_object_name = "orders"
@@ -207,18 +204,46 @@ class OwnerOrderListView(LoginRequiredMixin, ListView):
 
 class OwnerOrderDetailView(LoginRequiredMixin, OwnerOrderPermissionMixin, DetailView):
     """Detail of a single order for the owner."""
-
     model = Order
     template_name = "orders/owner_detail.html"
     context_object_name = "order"
 
+    def post(self, request, *args, **kwargs):
+        """
+        Handle CREATED -> PREPARING directly from the detail page.
+        """
+        self.object = self.get_object()
+        if self.object.status != Order.STATUS_CREATED:
+            messages.error(request, "Invalid transition. Only CREATED → PREPARING is allowed.")
+            return redirect("orders:owner_detail", pk=self.object.pk)
+
+        try:
+            self.object.advance_to(Order.STATUS_PREPARING)
+        except ValueError:
+            messages.error(request, "Invalid status transition.")
+            return redirect("orders:owner_detail", pk=self.object.pk)
+
+        # Notify customer (console backend in development)
+        subject = f"Your order #{self.object.id} is now PREPARING"
+        message = "Good news! Your order is being prepared."
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
+        recipient_list = [self.object.user.email] if self.object.user.email else []
+        if recipient_list:
+            try:
+                send_mail(subject, message, from_email, recipient_list, fail_silently=True)
+            except Exception:
+                # ignore email failures in dev
+                pass
+
+        messages.success(request, "Order moved to PREPARING and customer notified.")
+        return redirect("orders:owner_detail", pk=self.object.pk)
+
 
 class OwnerOrderPrepareView(LoginRequiredMixin, OwnerOrderPermissionMixin, View):
     """
-    Advance an order forward to PREPARING (from CREATED/PAID).
-    Notify customer via email (console backend in development).
+    (Optional endpoint) Advance an order forward to PREPARING (from CREATED/PAID).
+    Kept for compatibility if templates point here explicitly.
     """
-
     def post(self, request, pk):
         order = get_object_or_404(Order, pk=pk)
         try:
@@ -242,7 +267,6 @@ class OwnerOrderPrepareView(LoginRequiredMixin, OwnerOrderPermissionMixin, View)
                     fail_silently=True,
                 )
             except Exception:
-                # In development, ignore email failures
                 pass
 
         messages.success(request, "Order moved to PREPARING and customer notified.")
@@ -352,3 +376,7 @@ def export_orders_csv(request):
         )
 
     return response
+
+
+def owner_orders(request):
+    return render(request, "orders/owner_orders.html")

@@ -21,7 +21,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from core.views import home
 from core import views as core_views
-from deliveries import views as deliveries_views
 
 
 app_name = "core"
@@ -45,9 +44,11 @@ urlpatterns = [
         core_views.operator_assign,
         name="operator_assign",
     ),
-    path("orders/", include(("orders.urls", "orders"), namespace="orders")),
+    path("orders/", include("orders.urls", namespace="orders")),
 ]
 
 # need only in dev mode (DEBUG=True)
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

@@ -72,7 +72,7 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link text-white {% if request.resolver_match and request.resolver_match.namespace == 'orders' and request.resolver_match.url_name == 'owner_orders' %}active fw-semibold{% endif %}"
-                   href="{% url 'orders:owner_orders' %}">Orders</a>
+                   href="{% url 'orders:owner_list' %}">Orders</a>
               </li>
             {% endif %}
 

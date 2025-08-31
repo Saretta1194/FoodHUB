@@ -1,19 +1,28 @@
-{# templates/restaurants/form.html #}
+{# restaurants/templates/restaurants/form.html #}
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-{% block content %}
-  <h1>
-    {% if view.object %}
-      Edit Restaurant
-    {% else %}
-      Create Restaurant
-    {% endif %}
-  </h1>
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-success">Save</button>
-    <a href="{% url 'restaurants:owner_list' %}" class="btn btn-secondary">Cancel</a>
-  </form>
+{% block content %}
+<section class="form-page">
+  <div class="card form-card">
+    <div class="card-body p-4 p-md-5">
+      <h1 class="h4 mb-3">
+        {% if view.object %}Edit restaurant{% else %}Create restaurant{% endif %}
+      </h1>
+
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <div class="d-flex justify-content-between mt-3">
+          <a href="{% url 'restaurants:owner_list' %}" class="btn btn-outline-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary">
+            {% if view.object %}Save changes{% else %}Create{% endif %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
 {% endblock %}
+

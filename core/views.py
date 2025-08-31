@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model
 from restaurants.models import Restaurant
-from orders.models import Order  # importa il modello giusto
+from orders.models import Order
 import csv
 
 
@@ -12,8 +13,22 @@ def home(request):
 
 
 def operator_assign(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    User = get_user_model()
+    riders = User.objects.filter(is_staff=True)  
 
-    pass
+    if request.method == "POST":
+        rider_id = request.POST.get("rider")
+        if rider_id:
+            rider = get_object_or_404(User, pk=rider_id)
+            order.rider = rider
+            order.save()
+            return redirect("deliveries:operator_queue")
+
+    return render(request, "deliveries/operator_assign.html", {
+        "order": order,
+        "riders": riders,
+    })
 
 
 def export_csv(request):

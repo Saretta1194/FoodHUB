@@ -31,8 +31,8 @@ CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.getenv(
 
 if not DEBUG and not CSRF_TRUSTED_ORIGINS:
     CSRF_TRUSTED_ORIGINS = [
-        f"https://{host.lstrip('.')}" 
-        for host in ALLOWED_HOSTS 
+        f"https://{host.lstrip('.')}"
+        for host in ALLOWED_HOSTS
         if host not in ["localhost", "127.0.0.1"]
     ]
 
@@ -116,10 +116,23 @@ DATABASES = {
 # Authentication
 # -----------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator"
+        )
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation."
+                "CommonPasswordValidator"
+    },
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "NumericPasswordValidator"
+        )
+    },
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -148,9 +161,13 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "core" / "static"]
 
 if DEBUG:
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    STATICFILES_STORAGE = (
+        "django.contrib.staticfiles.storage.StaticFilesStorage"
+    )
 else:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STATICFILES_STORAGE = (
+        "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    )
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -164,7 +181,10 @@ CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL", "").strip()
 
 if CLOUDINARY_URL:
     if not CLOUDINARY_URL.startswith("cloudinary://"):
-        raise RuntimeError("CLOUDINARY_URL must start with 'cloudinary://API_KEY:API_SECRET@CLOUD_NAME'")
+        raise RuntimeError(
+            "CLOUDINARY_URL must start with "
+            "'cloudinary://API_KEY:API_SECRET@CLOUD_NAME'"
+        )
 
     INSTALLED_APPS += ["cloudinary", "cloudinary_storage"]
     DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"

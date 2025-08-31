@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -30,7 +29,8 @@ class OwnerMixin(LoginRequiredMixin, UserPassesTestMixin):
         return obj.owner == self.request.user
 
     def handle_no_permission(self):
-        # Optionally customize (default redirects to login for LoginRequiredMixin)
+        # Optionally customize (default redirects to login for
+        # LoginRequiredMixin)
         return super().handle_no_permission()
 
 
@@ -55,6 +55,13 @@ class RestaurantCreateView(OwnerMixin, CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super().form_valid(form)
+
+
+class OwnerRestaurantCreateView(CreateView):
+    model = Restaurant
+    fields = ["name", "address", ...]  # metti i campi giusti
+    template_name = "restaurants/restaurant_form.html"
+    success_url = "/restaurants/my/"
 
 
 class RestaurantUpdateView(OwnerMixin, UpdateView):

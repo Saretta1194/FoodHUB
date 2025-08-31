@@ -1,10 +1,33 @@
+{# menu/templates/menu/dish_form.html #}
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
 {% block content %}
-<h1>{{ view.object|default:'Create Dish' }}</h1>
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Save</button>
-  <a href="{% url 'menu:dish_list' restaurant.id %}">Cancel</a>
-</form>
+<section class="form-page">
+  <div class="card form-card">
+    <div class="card-body p-4 p-md-5">
+      <h1 class="h4 mb-3">
+        {% if view.object %}Edit dish{% else %}Create dish{% endif %}
+      </h1>
+
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <div class="d-flex justify-content-between mt-3">
+          {# return dish, if you have; fallback alla owner_list #}
+          {% if view.kwargs.menu_id %}
+            <a href="{% url 'menu:dish_list' view.kwargs.menu_id %}" class="btn btn-outline-secondary">Cancel</a>
+          {% else %}
+            <a href="{% url 'restaurants:owner_list' %}" class="btn btn-outline-secondary">Cancel</a>
+          {% endif %}
+          <button type="submit" class="btn btn-primary">
+            {% if view.object %}Save changes{% else %}Create{% endif %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
 {% endblock %}
+

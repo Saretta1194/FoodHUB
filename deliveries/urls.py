@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from .views import (
     RiderDeliveryDetailView,
@@ -11,7 +11,7 @@ app_name = "deliveries"
 urlpatterns = [
     path("operator/queue/", views.operator_queue, name="operator_queue"),
     path(
-        "operator/assign/<int:order_id>/",
+        "operator/assign/<int:pk>/",
         views.operator_assign,
         name="operator_assign",
     ),

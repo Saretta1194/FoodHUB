@@ -23,7 +23,7 @@ def signup(request):
 
 @login_required
 def my_profile(request):
-    profile = request.user.profile  # garantito dai signals
+    profile = request.user.profile  # garantie signals
     if request.method == "POST":
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():

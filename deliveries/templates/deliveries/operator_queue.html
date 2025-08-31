@@ -16,22 +16,22 @@
     <a href="{% url 'export_csv' %}?from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-primary">Export CSV</a>
   </form>
 
-  {% if orders %}
+  {% if deliveries %}
     <div class="list-group">
-      {% for o in orders %}
+      {% for delivery in deliveries %}
         <div class="list-group-item">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              Order #{{ o.id }} — {{ o.user.username }} — {{ o.restaurant.name }} —
-              <span class="badge {{ o.status|lower|add:'-badge' }}">{{ o.status }}</span>
+              Order #{{ delivery.order.id }} — {{ delivery.order.user.username }} — {{ delivery.order.restaurant.name }} —
+              <span class="badge {{ delivery.status|lower|add:'-badge' }}">{{ delivery.status }}</span>
             </div>
-            <a href="{% url 'deliveries:operator_assign' o.id %}" class="btn btn-sm btn-outline-primary">Assign rider</a>
+            <a href="{% url 'deliveries:operator_assign' delivery.id %}" class="btn btn-sm btn-outline-primary">Assign rider</a>
           </div>
         </div>
       {% endfor %}
     </div>
   {% else %}
-    <div class="alert alert-info">No orders found in this range.</div>
+    <div class="alert alert-info">No deliveries found in this range.</div>
   {% endif %}
 </div>
 {% endblock %}

@@ -1,37 +1,25 @@
+{# deliveries/templates/deliveries/operator_assign.html #}
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
 {% block content %}
-<div class="container-narrow py-4">
-  <h1 class="h4 mb-3">Assign rider — Order #{{ order.id }}</h1>
+<div class="card form-card">
+  <div class="card-body p-4 p-md-5">
+    <h1 class="h4 mb-3">Assign rider — Delivery #{{ delivery.id }}</h1>
 
-  <div class="card">
-    <div class="card-body">
-      <p class="mb-2">
-        <strong>Restaurant:</strong> {{ order.restaurant.name }}<br>
-        <strong>Customer:</strong> {{ order.user.username }}<br>
-        <strong>Status:</strong> {{ order.status }}
-      </p>
+    <p class="text-muted mb-3">
+      Order #{{ delivery.order.id }} — {{ delivery.order.restaurant.name }}
+    </p>
 
-      <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="rider_id" class="form-label">Select rider</label>
-          <select name="rider_id" id="rider_id" class="form-select" required>
-            <option value="" disabled selected>Choose a rider…</option>
-            {% for u in riders %}
-              <option value="{{ u.id }}"
-                {% if delivery.rider and delivery.rider.id == u.id %}selected{% endif %}>
-                {{ u.username }}
-              </option>
-            {% endfor %}
-          </select>
-        </div>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form|crispy }}
 
-        <div class="d-flex gap-2">
-          <button class="btn btn-primary" type="submit">Assign</button>
-          <a href="{% url 'deliveries:operator_queue' %}" class="btn btn-outline-secondary">Cancel</a>
-        </div>
-      </form>
-    </div>
+      <div class="d-flex justify-content-between mt-3">
+        <a href="{% url 'deliveries:operator_queue' %}" class="btn btn-outline-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Assign</button>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock %}
