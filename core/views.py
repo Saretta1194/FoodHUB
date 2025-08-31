@@ -15,7 +15,7 @@ def home(request):
 def operator_assign(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     User = get_user_model()
-    riders = User.objects.filter(is_staff=True)  
+    riders = User.objects.filter(is_staff=True)
 
     if request.method == "POST":
         rider_id = request.POST.get("rider")

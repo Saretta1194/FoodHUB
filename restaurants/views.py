@@ -3,9 +3,9 @@ from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     CreateView,
-    UpdateView,
     DeleteView,
     DetailView,
+    UpdateView,
 )
 from django.shortcuts import get_object_or_404
 
@@ -101,13 +101,20 @@ class RestaurantDetailView(DetailView):
 
     def get_object(self, queryset=None):
         # Only show active restaurants
-        return get_object_or_404(Restaurant, pk=self.kwargs["pk"], is_active=True)
+        return get_object_or_404(
+            Restaurant,
+            pk=self.kwargs["pk"],
+            is_active=True
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         # Only available dishes, sorted by category -> name
-        dishes = Dish.objects.filter(restaurant=self.object, available=True).order_by(
-            "category", "name"
+        dishes = (
+            Dish.objects.filter(
+                restaurant=self.object,
+                available=True
+            ).order_by("category", "name")
         )
         ctx["dishes"] = dishes
         return ctx
