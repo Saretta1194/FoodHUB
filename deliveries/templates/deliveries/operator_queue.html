@@ -1,21 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Operator Queue</h1>
-<form method="get" action="{% url 'orders:export_orders_csv' %}" style="margin:12px 0;">
-  <label>From <input type="date" name="start"></label>
-  <label>To <input type="date" name="end"></label>
-  <button type="submit">Export CSV</button>
-</form>
-{% if orders %}
-  <ul>
-    {% for o in orders %}
-      <li>
-        Order #{{ o.id }} — {{ o.user.username }} — {{ o.restaurant.name }} — {{ o.status }}
-        <a href="{% url 'deliveries:assign_rider' o.id %}">Assign rider</a>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <div class="alert alert-info"> orders pending assignment.</div>
-{% endif %}
+<div class="container-narrow py-3">
+  <h1 class="mb-3">Operator Queue</h1>
+
+  <form method="get" class="d-flex align-items-end gap-2 mb-3">
+    <div>
+      <label class="form-label">From</label>
+      <input type="date" name="from" class="form-control" value="{{ request.GET.from }}">
+    </div>
+    <div>
+      <label class="form-label">To</label>
+      <input type="date" name="to" class="form-control" value="{{ request.GET.to }}">
+    </div>
+    <button class="btn btn-outline-secondary">Filter</button>
+    <a href="{% url 'export_csv' %}?from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-primary">Export CSV</a>
+  </form>
+
+  {% if orders %}
+    <div class="list-group">
+      {% for o in orders %}
+        <div class="list-group-item">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              Order #{{ o.id }} — {{ o.user.username }} — {{ o.restaurant.name }} —
+              <span class="badge {{ o.status|lower|add:'-badge' }}">{{ o.status }}</span>
+            </div>
+            <a href="{% url 'deliveries:operator_assign' o.id %}" class="btn btn-sm btn-outline-primary">Assign rider</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info">No orders found in this range.</div>
+  {% endif %}
+</div>
 {% endblock %}

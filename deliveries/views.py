@@ -163,3 +163,8 @@ class RiderMarkDeliveredView(
 
         messages.success(request, "Marked as DELIVERED.")
         return redirect("deliveries:rider_detail", pk=delivery.pk)
+
+
+def operator_assign(request, order_id):
+   
+    return render(request, "deliveries/operator_assign.html")

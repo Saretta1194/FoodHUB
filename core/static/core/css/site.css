@@ -24,7 +24,17 @@
   /* Sticky footer layout */
   .site{ min-height:100vh; display:flex; flex-direction:column; }
   .site-content{ flex:1 0 auto; }
-  .site-footer{ flex-shrink:0; background: var(--fh-accent); }
+  .site-footer {
+    background: var(--fh-accent);
+    color: #fff;
+    font-size: 0.9rem;
+  }
+  .site-footer a {
+    color: #fff;
+  }
+  .site-footer a:hover {
+    text-decoration: underline;
+  }
   
   /* Containers / sections helpers */
   .container-narrow { max-width: 920px; margin: 0 auto; }
@@ -149,3 +159,10 @@
     .restaurant-hero .hero-img-wrap img { height: 240px; }
   }
   
+  /* Order status badges */
+.created-badge     { background: #e7f1ff; color:#0b5ed7; }
+.preparing-badge   { background: #fff3cd; color:#a15c00; }
+.assigned-badge    { background: #e7f1ff; color:#0b5ed7; }
+.picked_up-badge   { background: #e2f0e7; color:#1e7e34; }
+.delivered-badge   { background: #d1f7d6; color:#146c43; }
+.cancelled-badge   { background: #fde2e2; color:#b02a37; }

@@ -130,14 +130,42 @@
   </main>
 
   <!-- Footer -->
-  <footer class="site-footer text-white py-3">
-    <div class="container text-center text-white-50 small">
-      <span>© {{ now|date:"Y" }} FoodHub</span>
-      <span class="opacity-75">Made with Django</span>
+   
+  <footer class="site-footer text-center text-md-start py-4 mt-5">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <!-- Left: Brand -->
+      <div class="mb-3 mb-md-0">
+        <span class="fw-bold text-white">FoodHub © {{ now|date:"Y" }}</span>
+      </div>
+
+      <!-- Center: Navigation links -->
+      <ul class="list-inline mb-3 mb-md-0">
+        <li class="list-inline-item"><a class="text-white" href="{% url 'about' %}">About</a></li>
+        <li class="list-inline-item"><a class="text-white" href="{% url 'shipping' %}">Shipping</a></li>
+        <li class="list-inline-item"><a class="text-white" href="{% url 'contact' %}">Contact</a></li>
+        <li class="list-inline-item"><a class="text-white" href="{% url 'privacy' %}">Privacy</a></li>
+        <li class="list-inline-item"><a class="text-white" href="{% url 'terms' %}">Terms</a></li>
+      </ul>
+
+      <!-- Right: Social icons -->
+      <div>
+        <a href="https://facebook.com" class="text-white me-3" target="_blank">
+          <i class="fa-brands fa-facebook"></i>
+        </a>
+        <a href="https://instagram.com" class="text-white me-3" target="_blank">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://twitter.com" class="text-white" target="_blank">
+          <i class="fa-brands fa-twitter"></i>
+        </a>
+      </div>
     </div>
   </footer>
 
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/acd11ec600.js" crossorigin="anonymous"></script>
 </body>
 </html>

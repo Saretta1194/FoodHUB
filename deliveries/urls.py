@@ -12,8 +12,8 @@ urlpatterns = [
     path("operator/queue/", views.operator_queue, name="operator_queue"),
     path(
         "operator/assign/<int:order_id>/",
-        views.assign_rider,
-        name="assign_rider",
+        views.operator_assign,
+        name="operator_assign",
     ),
     path("rider/", views.rider_deliveries, name="rider_deliveries"),
     path(

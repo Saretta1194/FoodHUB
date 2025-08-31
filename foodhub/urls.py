@@ -20,21 +20,32 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from core.views import home
+from core import views as core_views
+from deliveries import views as deliveries_views
+
+
+app_name = "core"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home, name="home"),  # Home page
-    path("restaurants/", include("restaurants.urls", namespace="restaurants")),
-    path("menu/", include("menu.urls", namespace="menu")),
-    path("accounts/", include("users.urls")),  # signup
+    path("about/", core_views.about, name="about"),
+    path("shipping/", core_views.shipping, name="shipping"),
+    path("contact/", core_views.contact, name="contact"),
+    path("users/", include("users.urls")),
+    path("restaurants/", include("restaurants.urls")),
+    path("menu/", include("menu.urls")),
+    path("deliveries/", include("deliveries.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
-    # login/logout/password reset
-    path("orders/", include("orders.urls", namespace="orders")),
-    path("deliveries/", include("deliveries.urls", namespace="deliveries")),
+    path("privacy/", core_views.privacy, name="privacy"),
+    path("terms/", core_views.terms, name="terms"),
+    path("operator/export-csv/", core_views.export_csv, name="export_csv"),
+    path("operator/assign/<int:order_id>/", core_views.operator_assign, name="operator_assign"),
+    path("orders/", include(("orders.urls", "orders"), namespace="orders")),
+
+
 ]
 
 # need only in dev mode (DEBUG=True)
 if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
-    )
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
