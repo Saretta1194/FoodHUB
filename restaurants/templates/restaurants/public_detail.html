@@ -1,53 +1,64 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="mb-4">
-  <h1 class="mb-1">{{ restaurant.name }}</h1>
-  <div class="text-muted">{{ restaurant.address }} — {{ restaurant.opening_hours }}</div>
+
+<section class="restaurant-hero mb-4">
   {% if restaurant.cover_image %}
-    <img src="{{ restaurant.cover_image.url }}" class="img-fluid my-3 rounded" alt="{{ restaurant.name }}">
+    <div class="hero-img-wrap">
+      <img src="{{ restaurant.cover_image.url }}" alt="{{ restaurant.name }}">
+    </div>
   {% endif %}
-  {% if restaurant.description %}
-    <p>{{ restaurant.description }}</p>
-  {% endif %}
-</div>
+  <div class="hero-info container-narrow">
+    <h1 class="display-6 mb-1">{{ restaurant.name }}</h1>
+    <div class="text-muted">{{ restaurant.address }} — {{ restaurant.opening_hours }}</div>
+    {% if restaurant.description %}
+      <p class="mt-3 mb-0">{{ restaurant.description }}</p>
+    {% endif %}
+  </div>
+</section>
 
-<h2 class="h4">Menu</h2>
-{% if dishes %}
-  <div class="row g-3">
-    {% for d in dishes %}
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card h-100">
-          {% if d.photo %}
-            <img src="{{ d.photo.url }}" class="card-img-top" alt="{{ d.name }}">
-          {% else %}
-            <img src="{% static 'img/placeholder.png' %}" class="card-img-top" alt="{{ d.name }}">
-          {% endif %}
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ d.name }}</h5>
-            {% if d.description %}
-              <p class="card-text">{{ d.description|truncatechars:140 }}</p>
-            {% endif %}
-            <p class="mt-auto fw-bold">€ {{ d.price|floatformat:2 }}</p>
+<section class="container-narrow">
+  <h2 class="h4 mb-3">Menu</h2>
 
-            {% if d.available %}
-              <form method="post" action="{% url 'orders:cart_add' d.id %}">
-                {% csrf_token %}
-                <div class="input-group">
-                  <input type="number" name="qty" class="form-control" value="1" min="1">
-                  <button type="submit" class="btn btn-success">Add to cart</button>
-                </div>
-              </form>
-            {% else %}
-              <span class="badge bg-secondary">Not available</span>
-            {% endif %}
+  {% if dishes %}
+    <div class="row g-3">
+      {% for d in dishes %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card h-100 dish-card shadow-sm">
+            <div class="ratio ratio-16x9">
+              {% if d.photo %}
+                <img src="{{ d.photo.url }}" class="dish-card-img" alt="{{ d.name }}">
+              {% else %}
+                <img src="{% static 'img/placeholder.png' %}" class="dish-card-img" alt="{{ d.name }}">
+              {% endif %}
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title mb-1">{{ d.name }}</h5>
+              {% if d.description %}
+                <p class="card-text text-muted small mb-2">{{ d.description|truncatechars:140 }}</p>
+              {% endif %}
+
+              <p class="mt-auto price-tag mb-3">€ {{ d.price|floatformat:2 }}</p>
+
+              {% if d.available %}
+                <form method="post" action="{% url 'orders:cart_add' d.id %}">
+                  {% csrf_token %}
+                  <div class="input-group">
+                    <input type="number" name="qty" class="form-control" value="1" min="1">
+                    <button type="submit" class="btn btn-success">Add to cart</button>
+                  </div>
+                </form>
+              {% else %}
+                <span class="badge bg-secondary">Not available</span>
+              {% endif %}
+            </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
+      {% endfor %}
+    </div>
   {% else %}
-  <div class="alert alert-info">No dishes yet.</div>
-{% endif %}
+    <div class="alert alert-info">No dishes yet.</div>
+  {% endif %}
+</section>
 
 {% endblock %}
