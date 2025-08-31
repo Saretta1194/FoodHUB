@@ -93,11 +93,12 @@
             {% endif %}
 
             <li class="nav-item">
-              <span class="nav-link text-white-50">Hello, {{ user.username }}</span>
-            </li>
-            <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'my_profile' %}">My profile</a>
             </li>
+            <li class="nav-item">
+              <span class="nav-link text-white-50">Hello, {{ user.username }}</span>
+            </li>
+            
             <li class="nav-item ms-lg-2">
               <a class="btn btn-sm btn-outline-light" href="{% url 'logout' %}">Logout</a>
             </li>
