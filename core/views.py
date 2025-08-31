@@ -1,6 +1,6 @@
 from django.shortcuts import render
+from restaurants.models import Restaurant
 
-
-# Create your views here.
 def home(request):
-    return render(request, "core/home.html")
+    restaurants = Restaurant.objects.filter(is_active=True)[:6]
+    return render(request, "core/home.html", {"restaurants": restaurants})
