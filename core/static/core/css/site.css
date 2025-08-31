@@ -4,8 +4,8 @@
    :root{
     --fh-bg: #FFF6EF;          /* page background */
     --fh-bg-soft: #FFF0E3;     /* soft section background */
-    --fh-accent: #A76545;      /* brand (navbar, primary btn) */
-    --fh-accent-2: #FFA55D;    /* accent hover */
+    --fh-accent: #FFA55D;      /* brand (navbar, primary btn) */
+    --fh-accent-2: #8E573B;    /* accent hover */
     --fh-highlight: #FFDF88;   /* highlight/badges */
     --fh-success: #ACC572;     /* success */
     --fh-text: #2c2c2c;        /* base text */
@@ -25,23 +25,40 @@
   .site{ min-height:100vh; display:flex; flex-direction:column; }
   .site-content{ flex:1 0 auto; }
   .site-footer{ flex-shrink:0; background: var(--fh-accent); }
-  
-  /* Navbar (uses brand color) */
-  .site-header .navbar{
-    background: var(--fh-accent);
+
+  /*Navbar*/
+  .navbar{
+    background-color: #FFA55D;
+    min-height: 64px;
   }
+  .navbar .navbar-brand img{
+    height: 56px;
+    width: auto;
+  }
+  
+/* Navbar active/hover */
+
+  .navbar .nav-link.active,
+  .navbar .nav-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #FFDF88 !important; /* highlight gialla */
+}
   
   /* Links */
   a { text-decoration: none; }
   a:hover { text-decoration: underline; }
   
   /* Buttons */
+ 
   a { text-decoration:none; }
   a:hover { text-decoration:underline; }
   .btn-primary{ background-color:var(--fh-accent); border-color:var(--fh-accent); }
   .btn-primary:hover{ background-color:var(--fh-accent-2); border-color:var(--fh-accent-2); }
   .btn-success{ background-color:var(--fh-success); border-color:var(--fh-success); }
+  
   /* Alerts tweak (optional) */
+  
   .alert-success{ border-left: 4px solid var(--fh-success); }
   .alert-info{ border-left: 4px solid var(--fh-highlight); }
   .alert-warning{ border-left: 4px solid var(--fh-accent-2); }
