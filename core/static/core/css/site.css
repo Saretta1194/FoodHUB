@@ -119,7 +119,6 @@
     width: min(520px, 100%);
     height: auto;
     border-radius: 12px;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
     object-fit: cover;
   }
   
@@ -206,6 +205,20 @@
   @media (max-width: 575.98px){
     .navbar { height: 72px; }
     .restaurant-hero .hero-img-wrap img { height: 240px; }
+  }
+  
+  /* Promo banner */
+.promo-banner{
+    background: var(--fh-accent-2);
+    color: #fff;
+    padding: .6rem 0;
+  }
+  .promo-banner .btn-outline-light{
+    color:#fff;
+    border-color:#fff;
+  }
+  .promo-banner .btn-outline-light:hover{
+    background:#fff; color: var(--fh-accent-2);
   }
   
   /* Order status badges */

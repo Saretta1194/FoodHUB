@@ -116,6 +116,16 @@
     </div>
   </nav>
 </header>
+<!-- Promo banner -->
+<div id="promo-banner" class="promo-banner" role="region" aria-label="Promotion" hidden>
+  <div class="container d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-3">
+      <span class="badge badge-highlight">NEW</span>
+      <span><strong>Free delivery</strong> over €20 — this week only!</span>
+    </div>
+    <button class="btn btn-sm btn-outline-light" id="promo-close" aria-label="Close promotion">Close</button>
+  </div>
+</div>
 
 
   <!-- Content -->
@@ -175,6 +185,7 @@
   <script src="https://kit.fontawesome.com/acd11ec600.js" crossorigin="anonymous"></script>
 <!--Jvscript-->
   <script>
+    
     const nav = document.querySelector('.navbar');
     const onScroll = () => { if (!nav) return; nav.classList.toggle('is-scrolled', window.scrollY > 8); };
     document.addEventListener('scroll', onScroll); onScroll();
@@ -200,7 +211,23 @@
       pill.classList.remove('pulse'); void pill.offsetWidth; // restart animation
       pill.classList.add('pulse');
     };
-    </script>
+
+    (function(){
+      const KEY = "fh_promo_closed_v1";
+      const banner = document.getElementById("promo-banner");
+      const closeBtn = document.getElementById("promo-close");
+      if (!localStorage.getItem(KEY) && banner) {
+         banner.hidden = false;
+    }
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+        localStorage.setItem(KEY, "1");
+        banner.hidden = true;
+      });
+    }
+  })();
+
+  </script>
     
 
 </body>
