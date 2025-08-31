@@ -6,7 +6,7 @@
     <div class="card-body p-4 p-md-5">
       <h1 class="h4 mb-3">My profile</h1>
 
-      {# Form di modifica profilo con styling Bootstrap via crispy #}
+      {# Form update profile with styling Bootstrap with crispy #}
       <form method="post" novalidate>
         {% csrf_token %}
         {{ form|crispy }}
@@ -17,7 +17,7 @@
 
       <hr class="my-4">
 
-      {# Sezione sola lettura con i dati utente #}
+      {# section only view with users data #}
       <h2 class="h5 mb-3">Personal info</h2>
       <dl class="row mb-0">
         <dt class="col-sm-4">Username</dt>

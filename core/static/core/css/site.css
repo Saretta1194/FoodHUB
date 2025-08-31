@@ -16,7 +16,7 @@
   
   /* Typography */
   html, body {
-    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     color: var(--fh-text);
     background: linear-gradient(180deg, var(--fh-bg) 0%, #FFECDD 100%);
   }
@@ -57,12 +57,12 @@
   .btn-primary:hover{ background-color:var(--fh-accent-2); border-color:var(--fh-accent-2); }
   .btn-success{ background-color:var(--fh-success); border-color:var(--fh-success); }
   
-  /* Alerts tweak (optional) */
+  /* Alerts tweak (optional) 
   
   .alert-success{ border-left: 4px solid var(--fh-success); }
   .alert-info{ border-left: 4px solid var(--fh-highlight); }
   .alert-warning{ border-left: 4px solid var(--fh-accent-2); }
-  .alert-danger{ border-left: 4px solid #dc3545; }
+  .alert-danger{ border-left: 4px solid #dc3545; } */
   
  /* cards */
 .card{
@@ -73,7 +73,7 @@
   }
   .card-title{ color: var(--fh-accent); }
   
-  /* form page layout (centratura) */
+  /* form page layout */
   .form-page{
     min-height: calc(100vh - 160px); /* header+footer approx */
     display: grid;
@@ -111,3 +111,8 @@
   .form-label{ font-weight: 600; }
   input::placeholder, textarea::placeholder{ color: #9aa3ac; }
   
+  /* Alerts brand-colored */
+.alert-success{ background:#ACC572; color:#fff; border-color:#ACC572; }
+.alert-danger{ background:#A76545; color:#fff; border-color:#A76545; }
+.alert-info{ background:#FFDF88; color:#5a3c2a; border-color:#FFDF88; }
+.alert-warning{ background:#FFA55D; color:#5a3c2a; border-color:#FFA55D; }

@@ -38,8 +38,7 @@
   {% endif %}
 </p>
 {% else %}
-  <p>Your cart is empty.</p>
+  <div class="alert alert-info">Your cart is empty.</div>
 {% endif %}
-
 <p><a href="{% url 'restaurants:public_list' %}">&larr; Continue browsing</a></p>
 {% endblock %}
