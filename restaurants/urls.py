@@ -7,7 +7,9 @@ urlpatterns = [
     # --- Owner dashboard ---
     path("my/", views.OwnerRestaurantListView.as_view(), name="owner_list"),
     path("my/create/", views.OwnerRestaurantCreateView.as_view(), name="owner_create"),
-    path("my/<int:pk>/edit/", views.RestaurantUpdateView.as_view(), name="owner_update"),
+    path(
+        "my/<int:pk>/edit/", views.RestaurantUpdateView.as_view(), name="owner_update"
+    ),
     path(
         "my/<int:pk>/delete/",
         views.RestaurantDeleteView.as_view(),

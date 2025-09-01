@@ -46,7 +46,7 @@ class Order(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="order_deliveries"
+        related_name="order_deliveries",
     )
 
     status = models.CharField(

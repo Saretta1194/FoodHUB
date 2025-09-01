@@ -25,10 +25,14 @@ def operator_assign(request, order_id):
             order.save()
             return redirect("deliveries:operator_queue")
 
-    return render(request, "deliveries/operator_assign.html", {
-        "order": order,
-        "riders": riders,
-    })
+    return render(
+        request,
+        "deliveries/operator_assign.html",
+        {
+            "order": order,
+            "riders": riders,
+        },
+    )
 
 
 def export_csv(request):

@@ -18,16 +18,16 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 if not DEBUG and SECRET_KEY == "dev-insecure-key-change-me":
     raise RuntimeError("SECRET_KEY env var is required in production.")
 
-ALLOWED_HOSTS = [h.strip() for h in os.getenv(
-    "ALLOWED_HOSTS",
-    "localhost,127.0.0.1,.herokuapp.com"
-).split(",") if h.strip()]
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,.herokuapp.com").split(",")
+    if h.strip()
+]
 
 # CSRF trusted origins must include https://
-CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.getenv(
-    "CSRF_TRUSTED_ORIGINS",
-    ""
-).split(",") if o.strip()]
+CSRF_TRUSTED_ORIGINS = [
+    o.strip() for o in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if o.strip()
+]
 
 if not DEBUG and not CSRF_TRUSTED_ORIGINS:
     CSRF_TRUSTED_ORIGINS = [
@@ -123,16 +123,8 @@ AUTH_PASSWORD_VALIDATORS = [
         )
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {
-        "NAME": "django.contrib.auth.password_validation."
-                "CommonPasswordValidator"
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "NumericPasswordValidator"
-        )
-    },
+    {"NAME": "django.contrib.auth.password_validation." "CommonPasswordValidator"},
+    {"NAME": ("django.contrib.auth.password_validation." "NumericPasswordValidator")},
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -161,13 +153,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "core" / "static"]
 
 if DEBUG:
-    STATICFILES_STORAGE = (
-        "django.contrib.staticfiles.storage.StaticFilesStorage"
-    )
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 else:
-    STATICFILES_STORAGE = (
-        "whitenoise.storage.CompressedManifestStaticFilesStorage"
-    )
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

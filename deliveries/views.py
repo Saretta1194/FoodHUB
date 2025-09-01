@@ -101,7 +101,9 @@ class RiderMarkPickedUpView(LoginRequiredMixin, RiderDeliveryPermissionMixin, Vi
         subject = f"Your order #{order.id} has been picked up"
         message = "Your order is on its way to you."
         from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
-        recipient_list = [order.user.email] if getattr(order.user, "email", None) else []
+        recipient_list = (
+            [order.user.email] if getattr(order.user, "email", None) else []
+        )
         if recipient_list:
             try:
                 send_mail(
@@ -134,7 +136,9 @@ class RiderMarkDeliveredView(LoginRequiredMixin, RiderDeliveryPermissionMixin, V
         subject = f"Your order #{order.id} has been delivered"
         message = "Enjoy your meal! Your order has been delivered."
         from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@foodhub.local")
-        recipient_list = [order.user.email] if getattr(order.user, "email", None) else []
+        recipient_list = (
+            [order.user.email] if getattr(order.user, "email", None) else []
+        )
         if recipient_list:
             try:
                 send_mail(

@@ -1,4 +1,4 @@
- [FOODHUB logo] (https://res.cloudinary.com/dvfo3mqdj/image/upload/v1756631210/foodh_ac3ilg.png)
+<img src="core/static/core//img/hero-illustration.png" alt="Homepage screenshot" width="400">  
 
 A full-stack Django web application for online food ordering and delivery management.  
 Customers can browse restaurants, add dishes to their cart, and place orders.  
@@ -32,6 +32,8 @@ The deployed project live link is [HERE](https://foodhub-f53dab9dc3ee.herokuapp.
 ## Introduction  
 
 **FoodHub** is a food ordering and delivery platform inspired by services like JustEat.  
+<img src="core/static/core//img/homepage.png" alt="Homepage screenshot" width="800">  
+
 It allows different types of users (customers, restaurant owners, riders, and operators) to interact with the platform:  
 
 - Customers can browse restaurants, place orders, and track deliveries in real time.  
@@ -95,21 +97,22 @@ It allows different types of users (customers, restaurant owners, riders, and op
 ## Features  
 
 ### 🛒 Customer  
-- Browse restaurants and menus.  
+- Browse restaurants and menus. 
+<img src="core/static/core/img/restaurants.png" alt="Browse restaurants" width="800">  
 - Add items to cart and checkout.  
+<img src="core/static/core/img/add cart.png" alt="cart" width="800">  
 - Track order + delivery in real time.  
+<img src="core/static/core/img/successfully order.png" alt="delivery" width="800">  
 
 ### 🍴 Restaurant Owner  
-- Create and edit restaurant profile.  
+- Create and edit restaurant profile. 
+<img src="core/static/core/img/restaurant.png" alt="restaurant" width="800">   
 - Add dishes with photos, prices, descriptions.  
-- Manage incoming orders and update statuses.  
+- Manage incoming orders and update statuses. 
+<img src="core/static/core/img/my order.png" alt="Browse restaurants" width="800">   
 
-### 🚴 Rider  
-- View assigned deliveries.  
-- Update delivery status (picked up → delivered).  
 
 ### 🧑‍💼 Operator  
-- Assign riders to deliveries.  
 - Monitor overall delivery flow.  
 
 ### 🔔 Notifications  
@@ -117,9 +120,18 @@ It allows different types of users (customers, restaurant owners, riders, and op
 - Email notifications on order/delivery status changes.  
 
 ### 🎨 UI/UX Polish  
-- Custom color palette (#A76545, #FFA55D, #FFDF88, #ACC572).  
-- Responsive navbar with logo.  
-- Cards for restaurants and dishes.  
+- Custom color palette  
+<img src="core/static/core/img/Color Hunt Palette a76545ffa55dffdf88acc572.png" alt="palette" width="200"> 
+
+(#A76545, #FFA55D
+ #FFDF88, #ACC572). 
+- Responsive navbar with logo. 
+ <img src="core/static/core/img/burger navbar.png" alt="navbar burger" width="800"> 
+ <img src="core/static/core/img/navbar.png" alt="navbar" width="800"> 
+- Footer with info and social links.
+<img src="core/static/core//img/footer.png" alt="footer" width="800">  
+- Cards for restaurants and dishes. 
+ <img src="core/static/core/img/cards.png" alt="cards" width="800">  
 - Empty state alerts with Bootstrap.  
 - Pagination for lists.  
 
@@ -152,35 +164,84 @@ It allows different types of users (customers, restaurant owners, riders, and op
 ---
 
 ## Testing  
-
-The project has been tested with:  
-
-- Django unit tests (`python manage.py test`).  
-- Manual end-to-end testing (signup → order → assignment → delivery).  
-- Mobile responsiveness testing (Chrome DevTools).  
-- Browser compatibility (Chrome, Firefox, Safari).  
+The portal has undergone extensive testing, and the results are available for review
+[here - TESTING](https://github.com/Saretta1194/FoodHUB/blob/main/TESTING.md)
+ 
 
 ---
 
 ## Validation  
 
-- **HTML/CSS** checked via W3C validators.  
-- **Python code** checked via Flake8/CI Linter.  
-- **Accessibility** tested with Lighthouse.  
+- **HTML/CSS** checked via W3C validators. 
+<img src="core/static/core/img/css test.png" alt="css" width="400"><img src="core/static/core/img/html cart.png" alt="cart" width="400"><img src="core/static/core/img/html homepage.png" alt="homepage" width="400"> <img src="core/static/core/img/html restaurants.png" alt="restaurant" width="400"> <img src="core/static/core/img/html signup.png" alt="signup" width="400"><img src="core/static/core/img/htmllogin.png" alt="login" width="400">
+
+- **Python code** checked via Flake8/CI Linter.
+Below are some screenshots of automated Python tests (only a sample, as full coverage generated many test outputs):  
+
+<img src="core/static/core/img/python test1.png" alt="Python test models" width="400">  
+<img src="core/static/core/img/pythontest2.png" alt="Python test " width="400">  
+<img src="core/static/core/img/pythontest3.png" alt="Python test " width="400">  
+<img src="core/static/core/img/pythontest4.png" alt="Python test " width="400">  
+<img src="core/static/core/img/pythontest5.png" alt="Python test " width="400">  
+<img src="core/static/core/img/pythontest6.png" alt="Python test" width="400">  
+
 
 ---
 
-## Deployment  
+## Deployment - Heroku
 
-- Hosted on Heroku with PostgreSQL.  
-- Media served via Cloudinary.  
-- Static files handled by WhiteNoise.  
-- Deployment steps:  
-  - Push code to GitHub.  
-  - Connect Heroku to GitHub repo.  
-  - Set config vars (`SECRET_KEY`, `DATABASE_URL`, `CLOUDINARY_URL`, `EMAIL_*`).  
-  - Deploy branch.  
+The subsequent actions were carried out to facilitate the deployment of this page to Heroku from its corresponding GitHub repository:
 
+### Create the Heroku App
+
+- Log in to [Heroku](https://dashboard.heroku.com/apps) or create an account.
+- On the main page click the button labeled "New" in the top right corner and from the drop-down menu select "Create New App".
+- Enter a unique and meaningful app name.
+- Next, select your region.
+- Click on the Create App button.
+
+### Attach the Postgres database
+
+- In the Resources tab, under add-ons, type in Postgres and select the Heroku Postgres option.
+- Copy the DATABASE_URL located in Config Vars in the Settings Tab.
+
+### Prepare the environment and settings.py file
+
+- In your workspace, create an env.py file in the main directory.
+- Add the DATABASE_URL value and your chosen SECRET_KEY value to the env.py file.
+- Update the settings.py file to import the env.py file and add the SECRETKEY and DATABASE_URL file paths.
+- Comment out the default database configuration.
+- Save files and make migrations.
+- Add Cloudinary URL to env.py.
+- Add the Cloudinary libraries to the list of installed apps.
+- Add the STATIC files settings - the url, storage path, directory path, root path, media url, and default file storage path.
+- Link the file to the templates directory in Heroku.
+- Change the templates directory to TEMPLATES_DIR.
+- Add Heroku to the ALLOWED_HOSTS list.
+
+### Create files/directories
+
+- Create requirements.txt file.
+- Create three directories in the main directory; media, storage, and templates.
+- Create a file named "Procfile" in the main directory and add the following: web: gunicorn project-name.wsgi.
+
+### Update Heroku Config Vars
+
+Add the following Config Vars in Heroku:
+
+- SECRET_KEY = yoursecretkey
+- CLOUDINARY_URL = yourcloudinaryurl
+- PORT = 8000
+- DISABLE_COLLECTSTATIC = 1
+
+### Deploy
+
+- NB: Ensure in Django settings, DEBUG is False
+- Go to the deploy tab on Heroku and connect to GitHub, then to the required repository.
+- Scroll to the bottom of the deploy page and either click Enable Automatic Deploys for automatic deploys or Deploy Branch to deploy manually. Manually deployed branches will need re-deploying each time the repo is updated.
+- Click View to view the deployed site.
+
+The site is now live and operational.
 ---
 
 ## Bugs  
@@ -200,5 +261,26 @@ The project has been tested with:
 - **Heroku Docs**: Deployment setup.  
 - **Slack community + mentor**: Guidance and debugging help.  
 - FoodHub branding and design inspired by services like JustEat.  
+- **Logo**: Created with the help of **Artificial Intelligence (AI)** design tools.  
+- **YouTube Tutorials**: Various Django/Bootstrap deployment and feature implementation videos were used for guidance.  
+
 
 ---
+## Frameworks - Libraries - Programs Used
+
+- [Django](https://www.djangoproject.com/): Main python framework used in the development of this project
+- [Django-allauth](https://django-allauth.readthedocs.io/en/latest/installation.html): authentication library used to create the user accounts
+- [PostgreSQL](https://www.postgresql.org/) was used as the database for this project.
+- [Heroku](https://dashboard.heroku.com/login) - was used as the cloud-based platform to deploy the site on.
+- [AmIResponsive?](https://ui.dev/amiresponsive) - Used to verify the responsiveness of my website on different devices.
+- [Chrome Dev Tools](https://developer.chrome.com/docs/devtools/) - Used for overall development and tweaking, including testing responsiveness and using lighthouse.
+- [Font Awesome](https://fontawesome.com/) - Used for icons in the three-reasons section.
+- [GitHub](https://github.com/) - Used for version control and agile tool.
+- [Google Fonts](https://fonts.google.com/) - Used to import and alter fonts on the page.
+- [W3C](https://www.w3.org/) - Used for HTML & CSS Validation.
+- [CI Python Linter](https://pep8ci.herokuapp.com/) - used to validate all the Python code
+- [Crispy Forms](https://django-crispy-forms.readthedocs.io/en/latest/) used to manage Django Forms
+- [Cloudinary](https://cloudinary.com/): the image hosting service used to upload images
+- [Bootstrap v5.3.2](https://getbootstrap.com/docs/5.3/getting-started/introduction/): CSS Framework for developing responsiveness and styling
+- [Pexels](https://www.pexels.com/it-it/cerca/food%20delivery/):picture for all website
+

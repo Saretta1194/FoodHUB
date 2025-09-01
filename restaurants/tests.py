@@ -38,10 +38,8 @@ class OwnerOnlyViewsTests(TestCase):
         resp = self.client.get(edit_url)
         self.assertEqual(resp.status_code, 200)
 
-
         resp = self.client.post(url, payload, follow=True)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(
             Restaurant.objects.filter(name="New Spot", owner=self.owner).exists()
         )
-

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 
@@ -41,7 +41,10 @@ class OwnerDishMixin(LoginRequiredMixin):
 
     def get_success_url(self):
         restaurant = self.get_restaurant()
-        return reverse("menu:dish_list", kwargs={"restaurant_id": restaurant.id})
+        return reverse(
+            "menu:dish_list",
+            kwargs={"restaurant_id": restaurant.id},
+        )
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Dish deleted successfully!")

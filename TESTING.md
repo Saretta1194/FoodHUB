@@ -53,17 +53,7 @@ Feedback improvements applied:
   - Android (Samsung Galaxy)  
 
 The site is fully responsive with Bootstrap 5 and custom CSS. Burger menu tested on mobile screens.  
-
----
-
-## 📧 Email & Notifications  
-
-- **Development**: Console backend used to print emails.  
-- **Production (Heroku)**: SMTP via config vars.  
-
-Test results:  
-- Customers receive email notifications when order/delivery status changes.  
-- Flash messages appear consistently (success/error/info).  
+  
 
 ---
 
@@ -84,6 +74,8 @@ Django unit tests were written for:
 - **Orders**: customer tracking JSON endpoint, owner-only permissions.  
 - **Exports**: CSV generation.  
 
-Command:  
+[BACK TO README](https://github.com/Saretta1194/FoodHUB/blob/main/README.md)
+
+The project has been tested 
 ```bash
 python manage.py test

@@ -129,8 +129,8 @@ def checkout(request):
             OrderItem.objects.create(
                 order=order,
                 dish=dish,
-                dish_name=dish.name,   # snapshot name
-                unit_price=dish.price, # snapshot price
+                dish_name=dish.name,  # snapshot name
+                unit_price=dish.price,  # snapshot price
                 quantity=qty,
             )
 
@@ -192,6 +192,7 @@ class OwnerOrderPermissionMixin(UserPassesTestMixin):
 
 class OwnerOrderListView(LoginRequiredMixin, ListView):
     """List orders for all restaurants owned by the current user."""
+
     model = Order
     template_name = "orders/owner_list.html"
     context_object_name = "orders"
@@ -204,6 +205,7 @@ class OwnerOrderListView(LoginRequiredMixin, ListView):
 
 class OwnerOrderDetailView(LoginRequiredMixin, OwnerOrderPermissionMixin, DetailView):
     """Detail of a single order for the owner."""
+
     model = Order
     template_name = "orders/owner_detail.html"
     context_object_name = "order"
@@ -214,7 +216,9 @@ class OwnerOrderDetailView(LoginRequiredMixin, OwnerOrderPermissionMixin, Detail
         """
         self.object = self.get_object()
         if self.object.status != Order.STATUS_CREATED:
-            messages.error(request, "Invalid transition. Only CREATED → PREPARING is allowed.")
+            messages.error(
+                request, "Invalid transition. Only CREATED → PREPARING is allowed."
+            )
             return redirect("orders:owner_detail", pk=self.object.pk)
 
         try:
@@ -230,7 +234,9 @@ class OwnerOrderDetailView(LoginRequiredMixin, OwnerOrderPermissionMixin, Detail
         recipient_list = [self.object.user.email] if self.object.user.email else []
         if recipient_list:
             try:
-                send_mail(subject, message, from_email, recipient_list, fail_silently=True)
+                send_mail(
+                    subject, message, from_email, recipient_list, fail_silently=True
+                )
             except Exception:
                 # ignore email failures in dev
                 pass
@@ -244,6 +250,7 @@ class OwnerOrderPrepareView(LoginRequiredMixin, OwnerOrderPermissionMixin, View)
     (Optional endpoint) Advance an order forward to PREPARING (from CREATED/PAID).
     Kept for compatibility if templates point here explicitly.
     """
+
     def post(self, request, pk):
         order = get_object_or_404(Order, pk=pk)
         try:
